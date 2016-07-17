@@ -1,0 +1,2 @@
+map <F4> :wall!<CR>:make<CR>
+map <F5> :!./htfc.exe test.fs<CR>
