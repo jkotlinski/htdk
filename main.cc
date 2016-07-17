@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
     }
 
     Tokens tokens = tokenize(buffer);
+
     free(buffer);
 
     return 0;

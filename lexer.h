@@ -1,8 +1,7 @@
 #pragma once
 
 #include <list>
-#include <string>
 
-typedef std::list<std::string> Tokens;
+typedef std::list<const char*> Tokens;
 
-Tokens tokenize(const char* buffer);
+Tokens tokenize(char* buffer);
