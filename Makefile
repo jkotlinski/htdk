@@ -1,13 +1,15 @@
-CC=g++
-CFLAGS=-I.
-DEPS = def/rot.h
-OBJ = main.o words.o
+OBJS = main.o words.o lexer.o
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+htfc: $(OBJS)
+	g++ $(OBJS) -o htfc
 
-htfc: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+# pull in dependency info for *existing* .o files
+-include $(OBJS:.o=.d)
+
+# compile and generate dependency info
+%.o: %.cc
+	g++ -c $(CFLAGS) $*.cc -o $*.o
+	g++ -MM $(CFLAGS) $*.cc > $*.d
 
 clean:
-	rm *.exe *.o
+	rm -f *.exe *.o *.d

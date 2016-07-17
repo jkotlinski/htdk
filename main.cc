@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "lexer.h"
+
 static char* readFile(const char* path) {
     FILE* f = fopen(path, "r");
     if (!f) {
@@ -13,8 +15,9 @@ static char* readFile(const char* path) {
     size_t len = ftell(f);
     rewind(f);
 
-    char* buffer = (char*)malloc(len);
+    char* buffer = (char*)malloc(len + 1);
     fread(buffer, 1, len, f);
+    buffer[len] = '\0';
     fclose(f);
     return buffer;
 }
@@ -30,6 +33,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    Tokens tokens = tokenize(buffer);
     free(buffer);
+
     return 0;
 }
