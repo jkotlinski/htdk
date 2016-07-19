@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "lexer.h"
+#include "scanner.h"
 
 static char* readFile(const char* path) {
     FILE* f = fopen(path, "r");
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    Tokens tokens = tokenize(buffer);
+    Tokens tokens = scan(buffer);
 
     free(buffer);
 
