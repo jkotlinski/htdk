@@ -12,22 +12,7 @@ enum TokenType {
 
 struct Token {
     explicit Token(TokenType type) : type(type) {}
-    ~Token() { free(data); }
 
     TokenType type;
-    void* data = nullptr;
-    size_t dataSize = 0;
-
-    Token(const Token& other) {
-        type = other.type;
-        dataSize = other.dataSize;
-        data = malloc(dataSize);
-        memcpy(data, other.data, dataSize);
-    }
-    Token(Token& other) {
-        type = other.type;
-        dataSize = other.dataSize;
-        data = malloc(dataSize);
-        memcpy(data, other.data, dataSize);
-    }
+    size_t data = 0;  // Big enough to hold a pointer.
 };
