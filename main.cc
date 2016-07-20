@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "generator.h"
 #include "scanner.h"
 
 static char* readFile(const char* path) {
@@ -34,6 +35,8 @@ int main(int argc, char* argv[]) {
     }
 
     Tokens tokens = scan(buffer);
+
+    generate_asm(tokens);
 
     free(buffer);
 

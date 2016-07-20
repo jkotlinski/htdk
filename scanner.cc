@@ -1,7 +1,8 @@
 #include "scanner.h"
 
-#include <cstdio>
 #include <cctype>
+#include <cstdio>
+#include <cstring>
 
 static bool is_decimal_integer(const char* s) {
     if (!*s) {
@@ -20,15 +21,23 @@ static bool is_number(const char* s) {
     return is_decimal_integer(s);
 }
 
-static std::unique_ptr<Token> token(const char* s) {
+static Token token(const char* s) {
     if (s[0] == ':' && s[1] == '\0') {
-        return std::make_unique<Colon>();
+        return Token(TokenType::Colon);
     } else if (s[0] == ';' && s[1] == '\0') {
-        return std::make_unique<SemiColon>();
+        return Token(TokenType::SemiColon);
     } else if (is_number(s)) {
-        return std::make_unique<Number>(s);
+        Token t(TokenType::Number);
+        t.dataSize = sizeof(int);
+        t.data = malloc(t.dataSize);
+        *(int*)t.data = atoi(s);
+        return t;
     }
-    return std::make_unique<WordName>(s);
+    Token t(TokenType::WordName);
+    t.dataSize = strlen(s) + 1;
+    t.data = malloc(t.dataSize);
+    strcpy((char*)t.data, s);
+    return t;
 }
 
 Tokens scan(char* s) {

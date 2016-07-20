@@ -1,4 +1,4 @@
-OBJS = main.o words.o scanner.o
+OBJS = main.o words.o scanner.o generator.o
 
 htfc: $(OBJS)
 	g++ $(OBJS) --std=c++14 -o htfc
@@ -8,7 +8,7 @@ htfc: $(OBJS)
 
 # compile and generate dependency info
 %.o: %.cc
-	g++ --std=c++14 -c $(CFLAGS) $*.cc -o $*.o
+	g++ --std=c++14 -Wextra -Wall -Werror --pedantic -c $(CFLAGS) $*.cc -o $*.o
 	g++ --std=c++14 -MM $(CFLAGS) $*.cc > $*.d
 
 clean:

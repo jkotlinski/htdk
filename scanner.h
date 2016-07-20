@@ -5,6 +5,6 @@
 
 #include "token.h"
 
-typedef std::list<std::unique_ptr<Token>> Tokens;
+typedef std::list<Token> Tokens;
 
 Tokens scan(char* buffer);
