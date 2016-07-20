@@ -16,12 +16,16 @@ static bool is_decimal_integer(const char* s) {
     return true;
 }
 
+static bool is_number(const char* s) {
+    return is_decimal_integer(s);
+}
+
 static std::unique_ptr<Token> token(const char* s) {
     if (s[0] == ':' && s[1] == '\0') {
         return std::make_unique<Colon>();
     } else if (s[0] == ';' && s[1] == '\0') {
         return std::make_unique<SemiColon>();
-    } else if (is_decimal_integer(s)) {
+    } else if (is_number(s)) {
         return std::make_unique<Number>(s);
     }
     return std::make_unique<WordName>(s);
