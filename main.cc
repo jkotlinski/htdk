@@ -1,9 +1,11 @@
 #include "words.h"
 
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 
 #include "generator.h"
+#include "runtime.h"
 #include "scanner.h"
 
 static char* readFile(const char* path) {
@@ -23,20 +25,47 @@ static char* readFile(const char* path) {
     return buffer;
 }
 
+static std::string asmPath(const char* fsPath) {
+    std::string asmPath(fsPath);
+    size_t it = asmPath.rfind(".fs");
+    if (it == std::string::npos) {
+        fprintf(stderr, "Input file name must end with .fs");
+        exit(1);
+    }
+    asmPath.replace(it, asmPath.back(), ".asm");
+    return asmPath;
+}
+
+static std::string prgPath(const char* fsPath) {
+    std::string prgPath(fsPath);
+    size_t it = prgPath.rfind(".fs");
+    if (it == std::string::npos) {
+        fprintf(stderr, "Input file name must end with .fs");
+        exit(1);
+    }
+    prgPath.replace(it, prgPath.back(), ".prg");
+    return prgPath;
+}
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         puts("Usage: htfc <infile.fs>");
         return 0;
     }
 
-    char* buffer = readFile(argv[1]);
+    const char* fsPath = argv[1];
+    char* buffer = readFile(fsPath);
     if (!buffer) {
         return 1;
     }
 
     Tokens tokens = scan(buffer);
 
-    generate_asm(tokens);
+    generateAsm(tokens);
+
+    FILE* f = fopen(asmPath(fsPath).c_str(), "w");
+    printRuntime(f, prgPath(fsPath).c_str());
+    fclose(f);
 
     free(buffer);
 
