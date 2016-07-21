@@ -7,4 +7,4 @@
 
 typedef std::list<Token> Tokens;
 
-void generateAsm(const Tokens& tokens);
+void generateAsm(FILE* f, const Tokens& tokens);

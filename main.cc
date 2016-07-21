@@ -61,10 +61,9 @@ int main(int argc, char* argv[]) {
 
     Tokens tokens = scan(buffer);
 
-    generateAsm(tokens);
-
     FILE* f = fopen(asmPath(fsPath).c_str(), "w");
     printRuntime(f, prgPath(fsPath).c_str());
+    generateAsm(f, tokens);
     fclose(f);
 
     free(buffer);
