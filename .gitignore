@@ -3,4 +3,5 @@
 *.d
 *.stackdump
 *.asm
+*.prg
 tags
