@@ -10,6 +10,7 @@ R"(; ACME Assembler
 
 * = $801
 !byte $b, $08, $a, 0, $9E, $32, $30, $36, $31, 0, 0, 0 ; basic header
+ldx #0
 jmp start
 )";
 
