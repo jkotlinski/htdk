@@ -8,7 +8,11 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
             case WordName:
-                // printf("'%s'\n", (const char*)it->data);
+                {
+                    const char* wordName = (const char*)it->data;
+                    fprintf(f, "\tjsr %s\n", dictionary->label(wordName));
+                    dictionary->markAsUsed(wordName);
+                }
                 break;
             case Number:
                 dictionary->markAsUsed("lit");

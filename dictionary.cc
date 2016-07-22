@@ -3,23 +3,30 @@
 #include <cassert>
 #include <cstdio>
 
-#include "def/rot.h"
+#include "def/cstore.h"
 #include "def/lit.h"
+#include "def/rot.h"
 
 Dictionary::Dictionary() {
-    words["rot"] = Word(rot, { 0 });
-    words["lit"] = Word(lit, { 0 });
+    words["rot"] = Word("rot", rot, { 0 });
+    words["lit"] = Word("lit", lit, { 0 });
+    words["c!"] = Word("cstore", cstore, { 0 });
 }
 
 void Dictionary::markAsUsed(const char* word) {
     usedWords.insert(word);
 }
 
+const char* Dictionary::label(const char* word) const {
+    auto wordIt = words.find(word);
+    assert(wordIt != words.end());
+    return wordIt->second.label;
+}
+
 void Dictionary::printUsedWords(FILE* f) const {
     for (auto it = usedWords.begin(); it != usedWords.end(); ++it) {
-        const char* wordName = it->c_str();
-        auto word = words.find(wordName);
-        assert(word != words.end());
-        fprintf(f, "\n\n%s:%s\n", wordName, word->second.definition);
+        auto wordIt = words.find(it->c_str());
+        assert(wordIt != words.end());
+        wordIt->second.print(f);
     }
 }

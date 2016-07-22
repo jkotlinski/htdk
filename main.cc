@@ -53,6 +53,7 @@ int main(int argc, char* argv[]) {
     printHeader(f);
     Dictionary dictionary;
     generateAsm(f, tokens, &dictionary);
+    fputs("\n\n; --- inbuilt words\n", f);
     dictionary.printUsedWords(f);
     fclose(f);
 

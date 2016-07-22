@@ -1,1 +1,1 @@
-: start 1 $d020 ;
+: start 1 $d020 c! ;
