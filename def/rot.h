@@ -1,14 +1,16 @@
-const char* rot =
-"    ldy MSB+2, x\n"
-"    lda MSB+1, x\n"
-"    sta MSB+2, x\n"
-"    lda MSB, x\n"
-"    sta MSB+1, x\n"
-"    sty MSB, x\n"
-"    ldy LSB+2, x\n"
-"    lda LSB+1, x\n"
-"    sta LSB+2, x\n"
-"    lda LSB, x\n"
-"    sta LSB+1, x\n"
-"    sty LSB, x\n"
-"    rts\n";
+#pragma once
+
+const char* const rot = R"(
+    ldy MSB+2, x
+    lda MSB+1, x
+    sta MSB+2, x
+    lda MSB, x
+    sta MSB+1, x
+    sty MSB, x
+    ldy LSB+2, x
+    lda LSB+1, x
+    sta LSB+2, x
+    lda LSB, x
+    sta LSB+1, x
+    sty LSB, x
+    rts)";

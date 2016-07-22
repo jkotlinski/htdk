@@ -6,5 +6,6 @@
 #include "token.h"
 
 typedef std::list<Token> Tokens;
+class Dictionary;
 
-void generateAsm(FILE* f, const Tokens& tokens);
+void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary);

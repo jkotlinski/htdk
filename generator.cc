@@ -2,13 +2,16 @@
 
 #include <iostream>
 
-void generateAsm(FILE* f, const Tokens& tokens) {
+#include "dictionary.h"
+
+void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
             case WordName:
                 // printf("'%s'\n", (const char*)it->data);
                 break;
             case Number:
+                dictionary->markAsUsed("lit");
                 fprintf(f, "\tjsr lit\n\t!word %i\n", (int)it->data);
                 break;
             case Colon:

@@ -1,5 +1,5 @@
 #pragma once
 
-#include <string>
+#include <cstdio>
 
-void printRuntime(FILE* f);
+void printHeader(FILE* f);

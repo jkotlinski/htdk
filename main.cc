@@ -1,9 +1,8 @@
-#include "words.h"
-
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
 
+#include "dictionary.h"
 #include "generator.h"
 #include "runtime.h"
 #include "scanner.h"
@@ -51,8 +50,10 @@ int main(int argc, char* argv[]) {
     Tokens tokens = scan(buffer);
 
     FILE* f = fopen(asmPath(fsPath).c_str(), "w");
-    printRuntime(f);
-    generateAsm(f, tokens);
+    printHeader(f);
+    Dictionary dictionary;
+    generateAsm(f, tokens, &dictionary);
+    dictionary.printUsedWords(f);
     fclose(f);
 
     free(buffer);
