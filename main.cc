@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     printHeader(f, prgPath(fsPath).c_str());
     Dictionary dictionary;
     generateAsm(f, tokens, &dictionary);
-    fputs("\n\n; --- inbuilt words\n", f);
+    fputs("\n; --- inbuilt words\n", f);
     dictionary.printUsedWords(f);
     fclose(f);
 

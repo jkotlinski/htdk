@@ -10,7 +10,14 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case WordName:
                 {
                     const char* wordName = (const char*)it->data;
-                    fprintf(f, "\tjsr %s\n", dictionary->label(wordName));
+                    ++it;
+                    if (it != tokens.end() && it->type == SemiColon) {
+                        // Tail call.
+                        fprintf(f, "\tjmp %s\n", dictionary->label(wordName));
+                    } else {
+                        --it;
+                        fprintf(f, "\tjsr %s\n", dictionary->label(wordName));
+                    }
                     dictionary->markAsUsed(wordName);
                 }
                 break;
@@ -27,7 +34,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fprintf(f, "\n__%s:\n", (const char*)it->data);
                 break;
             case SemiColon:
-                fputs("\trts", f);
+                fputs("\trts\n", f);
                 break;
         }
     }
