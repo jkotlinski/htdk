@@ -3,14 +3,14 @@
 #include <cassert>
 #include <cstdio>
 
-#include "def/cstore.h"
-#include "def/lit.h"
-#include "def/rot.h"
+#include "defs.h"
 
 Dictionary::Dictionary() {
+    words["1+"] = Word("oneplus", oneplus, { 0 });
+    words["c@"] = Word("cfetch", cfetch, { 0 });
+    words["c!"] = Word("cstore", cstore, { 0 });
     words["rot"] = Word("rot", rot, { 0 });
     words["lit"] = Word("lit", lit, { 0 });
-    words["c!"] = Word("cstore", cstore, { 0 });
 }
 
 void Dictionary::markAsUsed(const char* word) {
@@ -19,7 +19,10 @@ void Dictionary::markAsUsed(const char* word) {
 
 const char* Dictionary::label(const char* word) const {
     auto wordIt = words.find(word);
-    assert(wordIt != words.end());
+    if (wordIt == words.end()) {
+        fprintf(stderr, "Word '%s' not found!\n", word);
+        exit(1);
+    }
     return wordIt->second.label;
 }
 
