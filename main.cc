@@ -24,15 +24,25 @@ static char* readFile(const char* path) {
     return buffer;
 }
 
-static std::string asmPath(const char* fsPath) {
-    std::string asmPath(fsPath);
-    size_t it = asmPath.rfind(".fs");
+static size_t fsExtensionIt(const std::string& s) {
+    size_t it = s.rfind(".fs");
     if (it == std::string::npos) {
         fprintf(stderr, "Input file name must end with .fs");
         exit(1);
     }
-    asmPath.replace(it, asmPath.back(), ".asm");
+    return it;
+}
+
+static std::string asmPath(const char* fsPath) {
+    std::string asmPath(fsPath);
+    asmPath.replace(fsExtensionIt(asmPath), asmPath.back(), ".asm");
     return asmPath;
+}
+
+static std::string prgPath(const char* fsPath) {
+    std::string prgPath(fsPath);
+    prgPath.replace(fsExtensionIt(prgPath), prgPath.back(), ".prg");
+    return prgPath;
 }
 
 int main(int argc, char* argv[]) {
@@ -50,7 +60,7 @@ int main(int argc, char* argv[]) {
     Tokens tokens = scan(buffer);
 
     FILE* f = fopen(asmPath(fsPath).c_str(), "w");
-    printHeader(f);
+    printHeader(f, prgPath(fsPath).c_str());
     Dictionary dictionary;
     generateAsm(f, tokens, &dictionary);
     fputs("\n\n; --- inbuilt words\n", f);

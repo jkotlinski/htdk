@@ -8,6 +8,7 @@ const char* runtimeDefinition =
 R"(; ACME Assembler
 !cpu 6510
 !ct pet
+!to "%s",cbm
 
 MSB = $73 ; msb stack is [$3b, $72]
 LSB = $3b ; lsb stack is [3, $3a]
@@ -20,6 +21,6 @@ W = $8b ; rnd seed
     jmp __start
 )";
 
-void printHeader(FILE* f) {
-    fprintf(f, runtimeDefinition);
+void printHeader(FILE* f, const char* prgPath) {
+    fprintf(f, runtimeDefinition, prgPath);
 }

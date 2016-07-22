@@ -2,4 +2,4 @@
 
 #include <cstdio>
 
-void printHeader(FILE* f);
+void printHeader(FILE* f, const char* prgPath);
