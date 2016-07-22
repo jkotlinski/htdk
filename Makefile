@@ -12,4 +12,4 @@ htfc: $(OBJS)
 	g++ --std=c++14 -MM $(CFLAGS) $*.cc > $*.d
 
 clean:
-	rm -f *.exe *.o *.d
+	rm -f *.exe *.o *.d *.asm *.prg
