@@ -14,6 +14,10 @@ Dictionary::Dictionary() {
 }
 
 void Dictionary::addWord(const char* word) {
+    if (words.find(word) != words.end()) {
+        fprintf(stderr, "Redefining word '%s' is not allowed\n", word);
+        exit(1);
+    }
     words[word] = Word(word, nullptr, { 0 });
     addedWords.insert(word);
 }
