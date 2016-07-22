@@ -88,15 +88,19 @@ static int parse_number(const char* s) {
 
 static Token token(const char* s) {
     if (s[0] == ':' && s[1] == '\0') {
-        return Token(TokenType::Colon);
+        return Token(Colon);
     } else if (s[0] == ';' && s[1] == '\0') {
-        return Token(TokenType::SemiColon);
+        return Token(SemiColon);
+    } else if (!strcmp("begin", s)) {
+        return Token(Begin);
+    } else if (!strcmp("again", s)) {
+        return Token(Again);
     } else if (is_number(s)) {
-        Token t(TokenType::Number);
+        Token t(Number);
         t.data = (size_t)parse_number(s);
         return t;
     }
-    Token t(TokenType::WordName);
+    Token t(WordName);
     t.data = (size_t)s;
     return t;
 }

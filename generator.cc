@@ -1,10 +1,15 @@
 #include "generator.h"
 
+#include <cassert>
+#include <deque>
 #include <iostream>
 
 #include "dictionary.h"
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
+    std::deque<int> stack;
+    int localLabel = 0;
+
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
             case WordName:
@@ -35,6 +40,14 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 break;
             case SemiColon:
                 fputs("\trts\n", f);
+                break;
+            case Begin:
+                stack.push_back(localLabel);
+                fprintf(f, ".l%i:\n", localLabel++);
+                break;
+            case Again:
+                fprintf(f, "\tjmp .l%i\n", stack.back());
+                stack.pop_back();
                 break;
         }
     }

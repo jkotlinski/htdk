@@ -7,7 +7,9 @@ enum TokenType {
     WordName,
     Number,
     Colon,
-    SemiColon
+    SemiColon,
+    Begin,
+    Again
 };
 
 struct Token {
