@@ -36,7 +36,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, ": must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n__%s:\n", (const char*)it->data);
+                fprintf(f, "\n%s:\n", (const char*)it->data);
+                dictionary->addWord((const char*)it->data);
                 break;
             case SemiColon:
                 fputs("\trts\n", f);

@@ -13,6 +13,11 @@ Dictionary::Dictionary() {
     words["lit"] = Word("lit", lit, { 0 });
 }
 
+void Dictionary::addWord(const char* word) {
+    words[word] = Word(word, nullptr, { 0 });
+    addedWords.insert(word);
+}
+
 void Dictionary::markAsUsed(const char* word) {
     usedWords.insert(word);
 }

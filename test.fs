@@ -1,1 +1,2 @@
-: start begin $d020 c@ 1+ $d020 c! again ;
+: border $d020 ;
+: start begin border c@ 1+ border c! again ;
