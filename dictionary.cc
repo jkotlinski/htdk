@@ -25,7 +25,7 @@ void Dictionary::markAsUsed(const char* word) {
 const char* Dictionary::label(const char* word) const {
     auto wordIt = words.find(word);
     if (wordIt == words.end()) {
-        fprintf(stderr, "Word '%s' not found!\n", word);
+        fprintf(stderr, "Undefined word '%s'\n", word);
         exit(1);
     }
     return wordIt->second.label;
