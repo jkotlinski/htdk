@@ -2,4 +2,4 @@
 
 #include <string>
 
-void printRuntime(FILE* f, const char* prgPath);
+void printRuntime(FILE* f);

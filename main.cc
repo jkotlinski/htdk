@@ -36,17 +36,6 @@ static std::string asmPath(const char* fsPath) {
     return asmPath;
 }
 
-static std::string prgPath(const char* fsPath) {
-    std::string prgPath(fsPath);
-    size_t it = prgPath.rfind(".fs");
-    if (it == std::string::npos) {
-        fprintf(stderr, "Input file name must end with .fs");
-        exit(1);
-    }
-    prgPath.replace(it, prgPath.back(), ".prg");
-    return prgPath;
-}
-
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         puts("Usage: htfc <infile.fs>");
@@ -62,7 +51,7 @@ int main(int argc, char* argv[]) {
     Tokens tokens = scan(buffer);
 
     FILE* f = fopen(asmPath(fsPath).c_str(), "w");
-    printRuntime(f, prgPath(fsPath).c_str());
+    printRuntime(f);
     generateAsm(f, tokens);
     fclose(f);
 
