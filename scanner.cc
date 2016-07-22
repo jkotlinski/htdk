@@ -8,6 +8,12 @@ static bool is_decimal_integer(const char* s) {
     if (!*s) {
         return false;
     }
+    if (*s == '#') {
+        ++s;
+        if (!*s) {
+            return false;
+        }
+    }
     if (*s == '-') {
         ++s;
         if (!*s) {
@@ -23,8 +29,61 @@ static bool is_decimal_integer(const char* s) {
     return true;
 }
 
+static bool is_hexadecimal_integer(const char* s) {
+    if (!*s) {
+        return false;
+    }
+    if (*s != '$') {
+        return false;
+    }
+    ++s;
+    if (!*s) {
+        return false;
+    }
+    if (*s == '-') {
+        ++s;
+        if (!*s) {
+            return false;
+        }
+    }
+    while (*s) {
+        if (!isdigit(*s) && (*s < 'a' || *s > 'f')) {
+            return false;
+        }
+        ++s;
+    }
+    return true;
+}
+
 static bool is_number(const char* s) {
-    return is_decimal_integer(s);
+    return is_decimal_integer(s) || is_hexadecimal_integer(s);
+}
+
+static int parse_hexadecimal_number(const char* s) {
+    ++s;  // Skip $
+    bool negate = false;
+    if (*s == '-') {
+        negate = true;
+        ++s;
+    }
+    int i = 0;
+    while (*s) {
+        i *= 16;
+        if (isdigit(*s)) {
+            i += *s - '0';
+        } else {
+            i += *s - 'a' + 10;
+        }
+        ++s;
+    }
+    return negate ? -i : i;
+}
+
+static int parse_number(const char* s) {
+    if (*s == '$') {
+        return parse_hexadecimal_number(s);
+    }
+    return atoi(s);
 }
 
 static Token token(const char* s) {
@@ -34,7 +93,7 @@ static Token token(const char* s) {
         return Token(TokenType::SemiColon);
     } else if (is_number(s)) {
         Token t(TokenType::Number);
-        t.data = (size_t)atoi(s);
+        t.data = (size_t)parse_number(s);
         return t;
     }
     Token t(TokenType::WordName);
