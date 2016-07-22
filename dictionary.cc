@@ -18,9 +18,8 @@ void Dictionary::markAsUsed(const char* word) {
 void Dictionary::printUsedWords(FILE* f) const {
     for (auto it = usedWords.begin(); it != usedWords.end(); ++it) {
         const char* wordName = it->c_str();
-        fprintf(f, "\n\n%s:", wordName);
         auto word = words.find(wordName);
         assert(word != words.end());
-        fputs(word->second.definition, f);
+        fprintf(f, "\n\n%s:%s\n", wordName, word->second.definition);
     }
 }
