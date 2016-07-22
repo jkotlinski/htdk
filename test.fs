@@ -1,1 +1,1 @@
-: start ;
+: start 1 ;

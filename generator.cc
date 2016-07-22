@@ -9,7 +9,7 @@ void generateAsm(FILE* f, const Tokens& tokens) {
                 // printf("'%s'\n", (const char*)it->data);
                 break;
             case Number:
-                // printf("%i\n", (int)it->data);
+                fprintf(f, "\tjsr lit\n\t!word %i\n", (int)it->data);
                 break;
             case Colon:
                 ++it;
@@ -17,7 +17,7 @@ void generateAsm(FILE* f, const Tokens& tokens) {
                     fprintf(stderr, ": must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "__%s:\n", (const char*)it->data);
+                fprintf(f, "\n__%s:\n", (const char*)it->data);
                 break;
             case SemiColon:
                 fputs("\trts", f);
