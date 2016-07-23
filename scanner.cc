@@ -95,6 +95,8 @@ static Token token(const char* s) {
         return Token(Begin);
     } else if (!strcmp("again", s)) {
         return Token(Again);
+    } else if (!strcmp("value", s)) {
+        return Token(Value);
     } else if (is_number(s)) {
         Token t(Number);
         t.data = (size_t)parse_number(s);

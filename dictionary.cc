@@ -9,8 +9,9 @@ Dictionary::Dictionary() {
     words["1+"] = Word("oneplus", oneplus, { 0 });
     words["c@"] = Word("cfetch", cfetch, { 0 });
     words["c!"] = Word("cstore", cstore, { 0 });
-    words["rot"] = Word("rot", rot, { 0 });
     words["lit"] = Word("lit", lit, { 0 });
+    words["pushya"] = Word("pushya", pushya, { 0 });
+    words["rot"] = Word("rot", rot, { 0 });
 }
 
 void Dictionary::addWord(const char* word) {
@@ -29,7 +30,7 @@ void Dictionary::markAsUsed(const char* word) {
 const char* Dictionary::label(const char* word) const {
     auto wordIt = words.find(word);
     if (wordIt == words.end()) {
-        fprintf(stderr, "Undefined word '%s'\n", word);
+        fprintf(stderr, "Undefined word: %s\n", word);
         exit(1);
     }
     return wordIt->second.label;
@@ -38,7 +39,10 @@ const char* Dictionary::label(const char* word) const {
 void Dictionary::printUsedWords(FILE* f) const {
     for (auto it = usedWords.begin(); it != usedWords.end(); ++it) {
         auto wordIt = words.find(it->c_str());
-        assert(wordIt != words.end());
+        if (wordIt == words.end()) {
+            fprintf(stderr, "Undefined word: %s\n", it->c_str());
+            exit(1);
+        }
         wordIt->second.print(f);
     }
 }

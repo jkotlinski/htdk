@@ -1,5 +1,11 @@
 #pragma once
 
+const char* const pushya = R"(
+    dex
+    sta LSB,x
+    sty MSB,x
++   rts)";
+
 const char* const oneplus = R"(
     inc LSB,x
     bne +

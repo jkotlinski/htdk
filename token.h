@@ -9,7 +9,8 @@ enum TokenType {
     Colon,
     SemiColon,
     Begin,
-    Again
+    Again,
+    Value
 };
 
 struct Token {
