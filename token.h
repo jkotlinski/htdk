@@ -10,7 +10,8 @@ enum TokenType {
     SemiColon,
     Begin,
     Again,
-    Value
+    Value,
+    Code
 };
 
 struct Token {

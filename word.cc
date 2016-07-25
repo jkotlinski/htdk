@@ -2,6 +2,6 @@
 
 void Word::print(FILE* f) const {
     if (definition) {
-        fprintf(f, "\n%s:%s\n", label, definition);
+        fprintf(f, "\n%s:%s\n", label.c_str(), definition);
     }
 }

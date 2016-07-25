@@ -86,11 +86,33 @@ static int parse_number(const char* s) {
     return atoi(s);
 }
 
-static Token token(const char* s) {
-    if (s[0] == ':' && s[1] == '\0') {
+static Token token(const char* s, const char** newS) {
+    if (!strcmp(":", s)) {
         return Token(Colon);
-    } else if (s[0] == ';' && s[1] == '\0') {
+    } else if (!strcmp(";", s)) {
         return Token(SemiColon);
+    } else if (!strcmp(":code", s)) {
+        s += strlen(":code ");
+        while (isspace(*s)) {
+            ++s;
+        }
+        std::string code;
+        while (!isspace(*s)) {
+            code.push_back(*s);
+            ++s;
+        }
+        code += ':';
+        while (memcmp(";code", s, strlen(";code"))) {
+            code.push_back(*s);
+            ++s;
+        }
+        code += "\trts\n";
+        *newS = s + strlen(";code ");
+        Token t(Code);
+        char* p = (char*)malloc(code.size() + 1);
+        strcpy(p, code.c_str());
+        t.data = (size_t)p;
+        return t;
     } else if (!strcmp("begin", s)) {
         return Token(Begin);
     } else if (!strcmp("again", s)) {
@@ -119,11 +141,16 @@ Tokens scan(char* s) {
         }
         *s = 0;
 
-        tokens.push_back(token(word));
+        const char* newS = nullptr;
+        tokens.push_back(token(word, &newS));
 
-        ++s;
-        while (*s && isspace(*s)) {
+        if (newS) {
+            s = (char*)newS;
+        } else {
             ++s;
+            while (*s && isspace(*s)) {
+                ++s;
+            }
         }
     }
     return tokens;

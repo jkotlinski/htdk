@@ -1,2 +1,4 @@
-$d020 value border
-: start begin border c@ 1+ border c! again ;
+:code incbg
+	inc $d020
+;code
+: start begin incbg again ;

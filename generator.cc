@@ -35,6 +35,18 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     stack.push_back((int)it->data);
                 }
                 break;
+            case Code:
+                {
+                    const char* p = (const char*)it->data;
+                    std::string wordName;
+                    while (*p != ':') {
+                        wordName.push_back(*p);
+                        ++p;
+                    }
+                    dictionary->addWord(wordName.c_str());
+                }
+                fputs((const char*)it->data, f);
+                break;
             case Colon:
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {

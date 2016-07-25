@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include <string>
 
 struct Word {
     Word() {}
@@ -9,7 +10,7 @@ struct Word {
 
     void print(FILE* f) const;
 
-    const char* label = nullptr;
+    std::string label;
     const char* definition = nullptr;
     const char** dependencies = nullptr;
 };

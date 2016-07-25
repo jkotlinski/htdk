@@ -33,7 +33,7 @@ const char* Dictionary::label(const char* word) const {
         fprintf(stderr, "Undefined word: %s\n", word);
         exit(1);
     }
-    return wordIt->second.label;
+    return wordIt->second.label.c_str();
 }
 
 void Dictionary::printUsedWords(FILE* f) const {
