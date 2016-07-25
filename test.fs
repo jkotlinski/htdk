@@ -1,4 +1,4 @@
 :code incbg
 	inc $d020
-;code
+    rts ;code
 : start begin incbg again ;

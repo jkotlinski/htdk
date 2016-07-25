@@ -106,7 +106,6 @@ static Token token(const char* s, const char** newS) {
             code.push_back(*s);
             ++s;
         }
-        code += "\trts\n";
         *newS = s + strlen(";code ");
         Token t(Code);
         char* p = (char*)malloc(code.size() + 1);
