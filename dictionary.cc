@@ -3,6 +3,8 @@
 #include <cassert>
 #include <cstdio>
 
+#include "label.h"
+
 void Dictionary::addWord(const char* word) {
     if (words.find(word) != words.end()) {
         fprintf(stderr, "Redefining word '%s' is not allowed\n", word);
@@ -23,22 +25,6 @@ void Dictionary::markAsUsed(const char* word) {
     if (addedIt == addedWords.end()) {
         missingWords.insert(l.c_str());
     }
-}
-
-std::string label(const char* word) {
-    std::string s;
-    while (*word) {
-        unsigned char c = *word;
-        if (isalpha(c)) {
-            s += c;
-        } else {
-            char buf[20];
-            sprintf(buf, "_%02x", c);
-            s += buf;
-        }
-        ++word;
-    }
-    return s;
 }
 
 const char* Dictionary::getMissingWord() const {

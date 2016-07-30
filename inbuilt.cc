@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include "dictionary.h"
+#include "label.h"
 
 static const char* const pushya = R"(
 :code pushya

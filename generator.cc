@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "dictionary.h"
+#include "label.h"
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     std::deque<int> stack;

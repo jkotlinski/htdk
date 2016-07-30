@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "dictionary.h"
+#include "label.h"
 
 static bool is_decimal_integer(const char* s) {
     if (!*s) {

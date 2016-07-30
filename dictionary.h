@@ -20,5 +20,3 @@ class Dictionary {
 
         std::map<std::string, Word> words;
 };
-
-std::string label(const char* word);
