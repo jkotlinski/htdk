@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <cctype>
-#include <cstdio>
 #include <cstring>
 
 #include "label.h"
@@ -105,7 +104,7 @@ static Token token(const char*& s) {
     std::string wordName;
     {
         const char* p = s;
-        while (!isspace(*p)) {
+        while (*p && !isspace(*p)) {
             wordName += *p;
             ++p;
         }

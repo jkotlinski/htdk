@@ -17,6 +17,4 @@ class Dictionary {
     private:
         std::set<std::string> missingWords;
         std::set<std::string> addedWords;
-
-        std::map<std::string, Word> words;
 };

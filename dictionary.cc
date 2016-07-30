@@ -1,16 +1,14 @@
 #include "dictionary.h"
 
 #include <cassert>
-#include <cstdio>
 
 #include "label.h"
 
 void Dictionary::addWord(const char* word) {
-    if (words.find(word) != words.end()) {
+    if (addedWords.find(word) != addedWords.end()) {
         fprintf(stderr, "Redefining word '%s' is not allowed\n", word);
         exit(1);
     }
-    words[word] = Word(word, nullptr, { 0 });
     addedWords.insert(word);
 
     auto missingIt = missingWords.find(word);

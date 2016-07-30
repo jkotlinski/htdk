@@ -1,1 +1,1 @@
-: start begin $d020 c@ 1+ $d020 c! again ;
+: start begin $d020 c@ 2+ $d020 c! again ;

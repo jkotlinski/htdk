@@ -1,6 +1,7 @@
 #include "inbuilt.h"
 
 #include <cstring>
+#include <vector>
 
 #include "label.h"
 
@@ -17,6 +18,8 @@ static const char* const oneplus = R"(
     bne +
     inc MSB,x
 +   rts ;code)";
+
+static const char* const twoplus = R"(: 2+ 1+ 1+ ;)";
 
 static const char* const cfetch = R"(
 :code c@
@@ -80,17 +83,37 @@ static const char* const rot = R"(
     sty LSB, x
     rts ;code)";
 
+std::vector<const char*> dependencies(const char* wordName) {
+    struct Pair {
+        const char* name;
+        const std::vector<const char*> deps;
+    };
+    static const Pair deps[] = {
+        { "2+", { "1+", nullptr } },
+        { nullptr, { nullptr } }
+    };
+    const Pair* it = deps;
+    while (it->name) {
+        if (!strcmp(it->name, wordName)) {
+            return it->deps;
+        }
+        ++it;
+    }
+    return std::vector<const char*>();
+}
+
 const char* getDefinition(const char* wordName) {
     struct Pair {
         const char* name;
         const char* definition;
     };
-    const Pair defs[] = {
+    static const Pair defs[] = {
         { "rot", rot },
         { "c!", cstore },
         { "c@", cfetch },
         { "lit", lit },
         { "1+", oneplus },
+        { "2+", twoplus },
         { "pushya", pushya },
         { nullptr, nullptr }
     };
