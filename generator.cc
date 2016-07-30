@@ -57,8 +57,12 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, ": must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
+                fprintf(f, "\n%s:", label(it->stringData).c_str());
                 dictionary->addWord(label(it->stringData).c_str());
+                if (it->stringData != label(it->stringData)) {
+                    fprintf(f, "\t; %s", it->stringData);
+                }
+                fprintf(f, "\n");
                 free(it->stringData);
                 state = true;
                 break;
