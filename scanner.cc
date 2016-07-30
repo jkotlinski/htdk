@@ -122,13 +122,15 @@ static Token token(const char*& s) {
         while (isspace(*s)) {
             ++s;
         }
-        std::string code;
+        wordName.clear();
         while (!isspace(*s)) {
-            code.push_back(*s);
+            wordName.push_back(*s);
             ++s;
         }
-        code = label(code.c_str());
-        code += ':';
+        std::string code = label(wordName.c_str()) + ":";
+        if (code.find('_') != std::string::npos) {
+            code += "\t; " + wordName;
+        }
         while (memcmp(";code", s, strlen(";code"))) {
             code.push_back(*s);
             ++s;
