@@ -7,4 +7,4 @@
 
 typedef std::list<Token> Tokens;
 
-Tokens scan(char* buffer);
+Tokens scan(const char* buffer);

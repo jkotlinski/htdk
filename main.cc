@@ -4,6 +4,7 @@
 
 #include "dictionary.h"
 #include "generator.h"
+#include "inbuilt.h"
 #include "runtime.h"
 #include "scanner.h"
 
@@ -57,14 +58,15 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    Tokens tokens = scan(buffer);
-
     FILE* f = fopen(asmPath(fsPath).c_str(), "w");
     printHeader(f, prgPath(fsPath).c_str());
     Dictionary dictionary;
-    generateAsm(f, tokens, &dictionary);
+    generateAsm(f, scan(buffer), &dictionary);
     fputs("\n; --- inbuilt words\n", f);
-    dictionary.printUsedWords(f);
+
+    while (dictionary.getMissingWord()) {
+        generateAsm(f, scan(getDefinition(dictionary.getMissingWord())), &dictionary);
+    }
     fclose(f);
 
     free(buffer);

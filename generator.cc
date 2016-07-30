@@ -15,29 +15,30 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
         switch (it->type) {
             case WordName:
                 {
-                    const char* wordName = (const char*)it->data;
+                    char* wordName = it->stringData;
                     ++it;
                     if (it != tokens.end() && it->type == SemiColon) {
                         // Tail call.
-                        fprintf(f, "\tjmp %s\n", dictionary->label(wordName));
+                        fprintf(f, "\tjmp %s\n", label(wordName).c_str());
                     } else {
                         --it;
-                        fprintf(f, "\tjsr %s\n", dictionary->label(wordName));
+                        fprintf(f, "\tjsr %s\n", label(wordName).c_str());
                     }
                     dictionary->markAsUsed(wordName);
+                    free(wordName);
                 }
                 break;
             case Number:
                 if (state) {
                     dictionary->markAsUsed("lit");
-                    fprintf(f, "\tjsr lit\n\t!word %i\n", (int)it->data);
+                    fprintf(f, "\tjsr lit\n\t!word %i\n", it->intData);
                 } else {
-                    stack.push_back((int)it->data);
+                    stack.push_back(it->intData);
                 }
                 break;
             case Code:
                 {
-                    const char* p = (const char*)it->data;
+                    char* p = it->stringData;
                     std::string wordName;
                     while (*p != ':') {
                         wordName.push_back(*p);
@@ -45,7 +46,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     }
                     dictionary->addWord(wordName.c_str());
                 }
-                fputs((const char*)it->data, f);
+                fputs(it->stringData, f);
+                fputs("\n", f);
+                free(it->stringData);
                 break;
             case Colon:
                 ++it;
@@ -53,8 +56,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, ": must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n%s:\n", (const char*)it->data);
-                dictionary->addWord((const char*)it->data);
+                fprintf(f, "\n%s:\n", it->stringData);
+                dictionary->addWord(it->stringData);
+                free(it->stringData);
                 state = true;
                 break;
             case SemiColon:
@@ -75,13 +79,14 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, "value must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n%s:\n", (const char*)it->data);
-                dictionary->addWord((const char*)it->data);
+                fprintf(f, "\n%s:\n", it->stringData);
+                dictionary->addWord(it->stringData);
                 fprintf(f, "\tlda #%i\n", stack.back() & 0xff);
                 fprintf(f, "\tldy #%i\n", stack.back() >> 8);
                 fprintf(f, "\tjmp pushya\n");
                 stack.pop_back();
                 dictionary->markAsUsed("pushya");
+                free(it->stringData);
                 break;
         }
     }

@@ -1,8 +1,11 @@
 #include "scanner.h"
 
+#include <cassert>
 #include <cctype>
 #include <cstdio>
 #include <cstring>
+
+#include "dictionary.h"
 
 static bool is_decimal_integer(const char* s) {
     if (!*s) {
@@ -86,12 +89,35 @@ static int parse_number(const char* s) {
     return atoi(s);
 }
 
-static Token token(const char* s, const char** newS) {
-    if (!strcmp(":", s)) {
+static void consumeWord(const char*& s) {
+    while (*s && !isspace(*s)) {
+        ++s;
+    }
+    while (*s && isspace(*s)) {
+        ++s;
+    }
+}
+
+static Token token(const char*& s) {
+    while (isspace(*s)) {
+        ++s;
+    }
+    std::string wordName;
+    {
+        const char* p = s;
+        while (!isspace(*p)) {
+            wordName += *p;
+            ++p;
+        }
+    }
+
+    if (wordName == ":") {
+        consumeWord(s);
         return Token(Colon);
-    } else if (!strcmp(";", s)) {
+    } else if (wordName == ";") {
+        consumeWord(s);
         return Token(SemiColon);
-    } else if (!strcmp(":code", s)) {
+    } else if (wordName == ":code") {
         s += strlen(":code ");
         while (isspace(*s)) {
             ++s;
@@ -101,56 +127,54 @@ static Token token(const char* s, const char** newS) {
             code.push_back(*s);
             ++s;
         }
+        code = label(code.c_str());
         code += ':';
         while (memcmp(";code", s, strlen(";code"))) {
             code.push_back(*s);
             ++s;
         }
-        *newS = s + strlen(";code ");
+        s += strlen(";code");
+        while (isspace(*s)) {
+            ++s;
+        }
         Token t(Code);
-        char* p = (char*)malloc(code.size() + 1);
-        strcpy(p, code.c_str());
-        t.data = (size_t)p;
+        t.stringData = (char*)malloc(code.size() + 1);
+        strcpy(t.stringData, code.c_str());
         return t;
-    } else if (!strcmp("begin", s)) {
+    } else if (wordName == "begin") {
+        consumeWord(s);
         return Token(Begin);
-    } else if (!strcmp("again", s)) {
+    } else if (wordName == "again") {
+        consumeWord(s);
         return Token(Again);
-    } else if (!strcmp("value", s)) {
+    } else if (wordName == "value") {
+        consumeWord(s);
         return Token(Value);
-    } else if (is_number(s)) {
+    } else if (is_number(wordName.c_str())) {
+        consumeWord(s);
         Token t(Number);
-        t.data = (size_t)parse_number(s);
+        t.intData = parse_number(wordName.c_str());
         return t;
     }
+
+    const char* p = s;
+    std::string str;
+    while (!isspace(*p)) {
+        str += *p;
+        ++p;
+    }
     Token t(WordName);
-    t.data = (size_t)s;
+    t.stringData = (char*)malloc(str.length() + 1);
+    strcpy(t.stringData, str.c_str());
+    consumeWord(s);
     return t;
 }
 
-Tokens scan(char* s) {
+Tokens scan(const char* s) {
+    assert(s);
     Tokens tokens;
     while (*s) {
-        const char* word = s;
-        while (*s && !isspace(*s)) {
-            ++s;
-        }
-        if (!*s) {
-            break;
-        }
-        *s = 0;
-
-        const char* newS = nullptr;
-        tokens.push_back(token(word, &newS));
-
-        if (newS) {
-            s = (char*)newS;
-        } else {
-            ++s;
-            while (*s && isspace(*s)) {
-                ++s;
-            }
-        }
+        tokens.push_back(token(s));
     }
     return tokens;
 }

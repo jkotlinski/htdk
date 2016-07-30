@@ -1,4 +1,1 @@
-:code incbg
-	inc $d020
-    rts ;code
-: start begin incbg again ;
+: start begin $d020 c@ 1+ $d020 c! again ;
