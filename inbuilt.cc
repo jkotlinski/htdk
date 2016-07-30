@@ -83,25 +83,6 @@ static const char* const rot = R"(
     sty LSB, x
     rts ;code)";
 
-std::vector<const char*> dependencies(const char* wordName) {
-    struct Pair {
-        const char* name;
-        const std::vector<const char*> deps;
-    };
-    static const Pair deps[] = {
-        { "2+", { "1+", nullptr } },
-        { nullptr, { nullptr } }
-    };
-    const Pair* it = deps;
-    while (it->name) {
-        if (!strcmp(it->name, wordName)) {
-            return it->deps;
-        }
-        ++it;
-    }
-    return std::vector<const char*>();
-}
-
 const char* getDefinition(const char* wordName) {
     struct Pair {
         const char* name;
