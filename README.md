@@ -4,7 +4,7 @@ Cross-compiled 6502 Forth, using [ACME assembler](https://sourceforge.net/projec
 
 Usage: `./htfc code.fs ; acme code.asm`
 
-The program runs the user-defined word named `start`.
+The resulting `code.prg` runs the user-defined word named `start`.
 
 ### Cross-compiled (target) words
 
