@@ -66,6 +66,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 free(it->stringData);
                 state = true;
                 break;
+            case Drop:
+                fputs("\tinx\t; drop\n", f);
+                break;
             case SemiColon:
                 fputs("\trts\n", f);
                 state = false;

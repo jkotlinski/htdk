@@ -11,7 +11,8 @@ enum TokenType {
     Begin,
     Again,
     Value,
-    Code
+    Code,
+    Drop
 };
 
 struct Token {

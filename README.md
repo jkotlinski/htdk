@@ -4,13 +4,15 @@ Cross-compiled 6502 Forth, using [ACME assembler](https://sourceforge.net/projec
 
 Usage: `./htfc code.fs ; acme code.asm`
 
+The program will start executing the user-defined word named 'start'.
+
 ### Cross-compiled (target) words
 
  * ;
  * 1+ 2+
  * begin again
  * c! c@
- * rot
+ * drop rot
 
 ### Interpreted (host) words
 

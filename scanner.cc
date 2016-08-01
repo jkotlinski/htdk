@@ -142,6 +142,9 @@ static Token token(const char*& s) {
         t.stringData = (char*)malloc(code.size() + 1);
         strcpy(t.stringData, code.c_str());
         return t;
+    } else if (wordName == "drop") {
+        consumeWord(s);
+        return Token(Drop);
     } else if (wordName == "begin") {
         consumeWord(s);
         return Token(Begin);
