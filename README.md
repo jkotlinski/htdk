@@ -4,7 +4,7 @@ Cross-compiled 6502 Forth, using [ACME assembler](https://sourceforge.net/projec
 
 Usage: `./htfc code.fs ; acme code.asm`
 
-htfc is non-standard, but words follow the [Forth 2012](http://forth-standard.org/standard/words) definitions when possible.
+htfc is non-standard, but matches [Forth 2012](http://forth-standard.org/standard/words) when possible.
 
 ### Cross-compiled (target) words
 
