@@ -6,8 +6,6 @@ Usage: `./htfc code.fs ; acme code.asm`
 
 ### Cross-compiled (target) words
 
-Following words are available within colon definitions:
-
  * ;
  * 1+ 2+
  * begin again
@@ -15,8 +13,6 @@ Following words are available within colon definitions:
  * rot
 
 ### Interpreted (host) words
-
-Following words are available outside colon definitions:
 
  * :
  * :code ;code
