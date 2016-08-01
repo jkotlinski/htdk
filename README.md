@@ -26,6 +26,10 @@ Usage: `./htfc code.fs ; acme code.asm`
 
 ### Assembler
 
+ * MSB = top of MSB parameter stack
+ * LSB = top of LSB parameter stack
+ * W = zero-page work area cell
+
 Code words are defined using ACME assembler:
 
     :code incbg
