@@ -1,10 +1,8 @@
 # Hack n' Trade Development Kit
 
-Cross-compiled 6502 Forth, using [ACME assembler](https://sourceforge.net/projects/acme-crossass/).
+Cross-compiled 6502 Forth, using [ACME assembler](https://sourceforge.net/projects/acme-crossass/). Non-standard, but matches [Forth 2012](http://forth-standard.org/standard/words) when possible.
 
 Usage: `./htfc code.fs ; acme code.asm`
-
-htfc is non-standard, but matches [Forth 2012](http://forth-standard.org/standard/words) when possible.
 
 ### Cross-compiled (target) words
 
