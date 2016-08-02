@@ -140,6 +140,9 @@ static Token token(const char*& s) {
     } else if (wordName == "then") {
         consumeWord(s);
         return Token(Then);
+    } else if (wordName == "else") {
+        consumeWord(s);
+        return Token(Else);
     } else if (wordName == "begin") {
         consumeWord(s);
         return Token(Begin);

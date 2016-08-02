@@ -11,7 +11,8 @@ enum TokenType {
     Code,
     Drop,
     If,
-    Then
+    Then,
+    Else
 };
 
 struct Token {

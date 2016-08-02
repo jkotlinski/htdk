@@ -85,6 +85,11 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 dictionary->markAsUsed("ifcmp");
                 stack.push_back(localLabel++);
                 break;
+            case Else:
+                fprintf(f, "\tjmp .l%i\n.l%i:\n", localLabel, stack.back());
+                stack.pop_back();
+                stack.push_back(localLabel++);
+                break;
             case Then:
                 fprintf(f, ".l%i:\n", stack.back());
                 stack.pop_back();

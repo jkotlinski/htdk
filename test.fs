@@ -1,3 +1,3 @@
 : start
-0 if 0 $d021 c! then
+1 if 1 else 0 then $d020 c!
 ;

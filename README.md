@@ -30,7 +30,7 @@ drop rot swap over dup 2dup
 
 #### Control structures
 
-begin again if then
+begin again if else then
 
 ### Number format
 
