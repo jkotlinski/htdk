@@ -16,7 +16,9 @@ void Dictionary::addWord(const char* word) {
 }
 
 void Dictionary::markAsUsed(const char* word) {
-    missingWords.insert(word);
+    if (addedWords.find(word) == addedWords.end()) {
+        missingWords.insert(word);
+    }
 }
 
 const char* Dictionary::getMissingWord() const {
