@@ -2,9 +2,9 @@
 
 #include <cassert>
 #include <cctype>
+#include <cstdlib>
 #include <cstring>
-
-#include "label.h"
+#include <string>
 
 static bool is_decimal_integer(const char* s) {
     if (!*s) {

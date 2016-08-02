@@ -2,8 +2,6 @@
 
 #include <cassert>
 
-#include "label.h"
-
 void Dictionary::addWord(const char* word) {
     if (addedWords.find(word) != addedWords.end()) {
         fprintf(stderr, "Redefining word '%s' is not allowed\n", word);
