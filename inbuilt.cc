@@ -1,8 +1,8 @@
 #include "inbuilt.h"
 
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
-
-#include "label.h"
 
 static const char pushya[] = R"(:code pushya
     dex
@@ -163,7 +163,7 @@ const char* getDefinition(const char* wordName) {
     };
     const Pair* it = defs;
     while (it->name) {
-        if (!strcmp(label(it->name).c_str(), wordName)) {
+        if (!strcmp(it->name, wordName)) {
             return it->definition;
         }
         ++it;

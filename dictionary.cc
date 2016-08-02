@@ -18,11 +18,7 @@ void Dictionary::addWord(const char* word) {
 }
 
 void Dictionary::markAsUsed(const char* word) {
-    std::string l = label(word);
-    auto addedIt = addedWords.find(l.c_str());
-    if (addedIt == addedWords.end()) {
-        missingWords.insert(l.c_str());
-    }
+    missingWords.insert(word);
 }
 
 const char* Dictionary::getMissingWord() const {

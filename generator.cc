@@ -41,14 +41,21 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 {
                     char* p = it->stringData;
                     std::string wordName;
-                    while (*p != ':') {
+                    while (!isspace(*p)) {
                         wordName.push_back(*p);
                         ++p;
                     }
                     dictionary->addWord(wordName.c_str());
+                    if (*p == '\n') {
+                        ++p;
+                    }
+                    if (label(wordName.c_str()) != wordName) {
+                        fprintf(f, "%s:\t; %s\n%s\n", label(wordName.c_str()).c_str(),
+                                wordName.c_str(), p);
+                    } else {
+                        fprintf(f, "%s:\n%s\n", wordName.c_str(), p);
+                    }
                 }
-                fputs(it->stringData, f);
-                fputs("\n", f);
                 free(it->stringData);
                 break;
             case Colon:
@@ -58,7 +65,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     exit(1);
                 }
                 fprintf(f, "\n%s:", label(it->stringData).c_str());
-                dictionary->addWord(label(it->stringData).c_str());
+                dictionary->addWord(it->stringData);
                 if (it->stringData != label(it->stringData)) {
                     fprintf(f, "\t; %s", it->stringData);
                 }
@@ -87,7 +94,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, "value must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n%s:\n", it->stringData);
+                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
                 dictionary->addWord(it->stringData);
                 fprintf(f, "\tlda #%i\n", stack.back() & 0xff);
                 fprintf(f, "\tldy #%i\n", stack.back() >> 8);
