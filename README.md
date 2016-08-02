@@ -10,7 +10,7 @@ The resulting `code.prg` runs the user-defined word named `start`.
 
 #### Compiling
 
-: ; :code ;code value
+: ; :code ;code value hex
 
 #### Arithmetic
 
