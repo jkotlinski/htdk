@@ -174,6 +174,37 @@ static const char and_[] = R"(:code and
     inx
     rts ;code)";
 
+static const char store[] = R"(:code !
+    lda LSB, x
+    sta W
+    lda MSB, x
+    sta W + 1
+
+    ldy #0
+    lda LSB+1, x
+    sta (W), y
+    iny
+    lda MSB+1, x
+    sta (W), y
+
+    inx
+    inx
+    rts ;code)";
+
+static const char fetch[] = R"(:code @
+    lda LSB,x
+    sta W
+    lda MSB,x
+    sta W+1
+
+    ldy #0
+    lda (W),y
+    sta LSB,x
+    iny
+    lda (W),y
+    sta MSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -182,22 +213,24 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
-        { "and", and_ },
-        { "=", equal },
-        { "0=", zequal },
-        { "dup", dup },
-        { "2dup", twodup },
-        { "over", over },
-        { "swap", swap },
-        { "rot", rot },
-        { "c!", cstore },
-        { "c@", cfetch },
-        { "lit", lit },
-        { "1+", oneplus },
-        { "1-", oneminus },
+        { "!", store },
         { "+", plus },
         { "-", minus },
+        { "0=", zequal },
+        { "1+", oneplus },
+        { "1-", oneminus },
         { "2+", twoplus },
+        { "2dup", twodup },
+        { "=", equal },
+        { "@", fetch },
+        { "and", and_ },
+        { "c!", cstore },
+        { "c@", cfetch },
+        { "dup", dup },
+        { "lit", lit },
+        { "over", over },
+        { "rot", rot },
+        { "swap", swap },
         { "pushya", pushya },
         { nullptr, nullptr }
     };
