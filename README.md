@@ -12,7 +12,7 @@ The resulting `code.prg` runs the user-defined word named `start`.
  * 1+ 2+
  * begin again
  * c! c@
- * drop rot
+ * drop rot swap
 
 ### Interpreted (host) words
 

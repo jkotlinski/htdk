@@ -5,23 +5,23 @@
 
 #include "label.h"
 
-static const char* const pushya = R"(
+static const char pushya[] = R"(
 :code pushya
     dex
     sta LSB,x
     sty MSB,x
 +   rts ;code)";
 
-static const char* const oneplus = R"(
+static const char oneplus[] = R"(
 :code 1+
     inc LSB,x
     bne +
     inc MSB,x
 +   rts ;code)";
 
-static const char* const twoplus = R"(: 2+ 1+ 1+ ;)";
+static const char twoplus[] = R"(: 2+ 1+ 1+ ;)";
 
-static const char* const cfetch = R"(
+static const char cfetch[] = R"(
 :code c@
     lda LSB,x
     sta + + 1
@@ -33,7 +33,7 @@ static const char* const cfetch = R"(
     sta MSB,x
     rts ;code)";
 
-static const char* const cstore = R"(
+static const char cstore[] = R"(
 :code c!
     lda LSB,x
     sta + + 1
@@ -45,7 +45,20 @@ static const char* const cstore = R"(
     inx
     rts ;code)";
 
-static const char* const lit = R"(
+static const char swap[] =R"(
+:code swap
+    ldy MSB, x
+    lda MSB + 1, x
+    sta MSB, x
+    sty MSB + 1, x
+
+    ldy LSB, x
+    lda LSB + 1, x
+    sta LSB, x
+    sty LSB + 1, x
+    rts ;code)";
+
+static const char lit[] = R"(
 :code lit
     dex
     pla
@@ -67,7 +80,7 @@ static const char* const lit = R"(
     sta + + 2
 +   jmp $1234 ;code)";
 
-static const char* const rot = R"(
+static const char rot[] = R"(
 :code rot
     ldy MSB+2, x
     lda MSB+1, x
@@ -89,6 +102,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "swap", swap },
         { "rot", rot },
         { "c!", cstore },
         { "c@", cfetch },
