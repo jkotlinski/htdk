@@ -3,30 +3,79 @@
 #include <cassert>
 #include <deque>
 #include <iostream>
+#include <map>
 
 #include "dictionary.h"
 #include "label.h"
+
+
+static void compileCall(FILE* f, const char* wordName, bool tailCall, Dictionary* dictionary) {
+    fprintf(f, tailCall ? "\tjmp %s\n" : "\tjsr %s\n", label(wordName).c_str());
+    dictionary->markAsUsed(wordName);
+}
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     std::deque<int> stack;
     int localLabel = 0;
     bool state = false;
+    std::set<int> undefinedVariables;
+    int variableLabel = 0;
+    std::map<std::string, int> variableLabels;
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
-            case WordName:
-                {
-                    char* wordName = it->stringData;
+            case Variable:
+                ++it;
+                if (it == tokens.end() || it->type != WordName) {
+                    fprintf(stderr, "variable must be followed by a word name!");
+                    exit(1);
+                }
+                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
+                dictionary->addWord(it->stringData);
+                fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp pushya\n+\n!word vl_%i\n", variableLabel);
+                undefinedVariables.insert(variableLabel);
+                variableLabels[it->stringData] = variableLabel;
+                ++variableLabel;
+                dictionary->markAsUsed("pushya");
+                free(it->stringData);
+                break;
+            case Store:
+                if (!state) {
+                    int variableLabel = stack.back();
+                    stack.pop_back();
+                    int value = stack.back();
+                    stack.pop_back();
+                    fprintf(f, "vl_%i = %i\n", variableLabel, value);
+                    undefinedVariables.erase(variableLabel);
+                    break;
+                } else {
                     ++it;
-                    if (it != tokens.end() && it->type == SemiColon) {
-                        // Tail call.
-                        fprintf(f, "\tjmp %s\n", label(wordName).c_str());
-                    } else {
-                        --it;
-                        fprintf(f, "\tjsr %s\n", label(wordName).c_str());
+                    bool tailCall = (it != tokens.end() && it->type == SemiColon);
+                    --it;
+                    compileCall(f, "!", tailCall, dictionary);
+                }
+                break;
+            case WordName:
+                // printf("WordName %s\n", it->stringData);
+                assert(it->stringData);
+                if (state) {
+                    ++it;
+                    bool tailCall = (it != tokens.end() && it->type == SemiColon);
+                    --it;
+                    compileCall(f, it->stringData, tailCall, dictionary);
+                    if (tailCall) {
+                        ++it;  // Skips ;
                     }
-                    dictionary->markAsUsed(wordName);
-                    free(wordName);
+                    free(it->stringData);
+                } else {
+                    char* wordName = it->stringData;
+                    if (variableLabels.find(wordName) != variableLabels.end()) {
+                        stack.push_back(variableLabels[wordName]);
+                        free(it->stringData);
+                    } else {
+                        fprintf(stderr, "Variable '%s' not defined\n", wordName);
+                        exit(1);
+                    }
                 }
                 break;
             case Number:
@@ -61,10 +110,11 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case Colon:
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {
-                    fprintf(stderr, ": must be followed by a word name!");
+                    fprintf(stderr, ": must be followed by a word name! (is type %i)\n", it->type);
                     exit(1);
                 }
                 fprintf(f, "\n%s:", label(it->stringData).c_str());
+                // printf("Colon %s\n", it->stringData);
                 dictionary->addWord(it->stringData);
                 if (it->stringData != label(it->stringData)) {
                     fprintf(f, "\t; %s", it->stringData);

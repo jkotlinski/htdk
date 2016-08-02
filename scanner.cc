@@ -18,7 +18,7 @@ static bool is_integer(const char* s, int base) {
     while (*s) {
         int n = *s;
         n -= '0';
-        if (n > '9') {
+        if (n > 9) {
             n += '0' - 'a' + 10;
         }
         if (n < 0 || n >= base) {
@@ -147,9 +147,15 @@ static Token token(const char*& s) {
     } else if (wordName == "then") {
         consumeWord(s);
         return Token(Then);
+    } else if (wordName == "variable") {
+        consumeWord(s);
+        return Token(Variable);
     } else if (wordName == "else") {
         consumeWord(s);
         return Token(Else);
+    } else if (wordName == "!") {
+        consumeWord(s);
+        return Token(Store);
     } else if (wordName == "begin") {
         consumeWord(s);
         return Token(Begin);
@@ -174,6 +180,7 @@ static Token token(const char*& s) {
     }
     Token t(WordName);
     t.stringData = (char*)malloc(str.length() + 1);
+    assert(t.stringData);
     strcpy(t.stringData, str.c_str());
     consumeWord(s);
     return t;
