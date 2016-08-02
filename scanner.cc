@@ -123,6 +123,21 @@ static Token token(const char*& s) {
     } else if (wordName == ";") {
         consumeWord(s);
         return Token(SemiColon);
+    } else if (wordName == "s\"") {
+        s += strlen("s\" ");
+        while (isspace(*s)) {
+            ++s;
+        }
+        std::string stringData;
+        while (!isspace(s[0]) || s[1] != '"' || !isspace(s[2])) {
+            stringData.push_back(*s);
+            ++s;
+        }
+        s += 3;
+        Token t(String);
+        t.stringData = (char*)malloc(stringData.size() + 1);
+        strcpy(t.stringData, stringData.c_str());
+        return t;
     } else if (wordName == ":code") {
         s += strlen(":code ");
         while (isspace(*s)) {

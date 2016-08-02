@@ -24,6 +24,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case String:
+                printf("'%s'\n", it->stringData);
+                assert(0);
+                break;
             case Variable:
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {
