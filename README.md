@@ -9,10 +9,10 @@ The resulting `code.prg` runs the user-defined word named `start`.
 ### Cross-compiled (target) words
 
  * ;
- * 1+ 2+
+ * 1+ 2+ 1- +
  * begin again
  * c! c@
- * drop rot swap
+ * drop rot swap over dup 2dup
 
 ### Interpreted (host) words
 
