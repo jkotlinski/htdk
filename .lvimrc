@@ -1,5 +1,5 @@
 map <F4> :wall!<CR>:make<CR>
-map <F5> :!./htfc.exe test.fs<CR>:!acme test.asm<CR>
-map <F6> :!cygstart test.prg<CR>
+map <F5> :!./htfc.exe tester.fs<CR>:!acme tester.asm<CR>
+map <F6> :!cygstart tester.prg<CR>
 
 set wildignore+=*.d,*.o
