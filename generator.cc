@@ -1,6 +1,7 @@
 #include "generator.h"
 
 #include <cassert>
+#include <cstring>
 #include <deque>
 #include <iostream>
 #include <map>
@@ -25,8 +26,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
             case String:
-                printf("'%s'\n", it->stringData);
-                assert(0);
+                fprintf(f, "\tjsr litstring\n!byte %i\n!text \"%s\"\n",
+                        (int)strlen(it->stringData), it->stringData);
+                dictionary->markAsUsed("litstring");
+                free(it->stringData);
                 break;
             case Variable:
                 ++it;
