@@ -1,10 +1,7 @@
 #pragma once
 
-#include <map>
 #include <set>
 #include <string>
-
-#include "word.h"
 
 class Dictionary {
     public:

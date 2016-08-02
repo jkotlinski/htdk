@@ -1,8 +1,5 @@
 #pragma once
 
-#include <cstdlib>
-#include <cstring>
-
 enum TokenType {
     WordName,
     Number,

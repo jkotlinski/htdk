@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include <memory>
+#include <cstdio>  // FILE
 
 #include "token.h"
 

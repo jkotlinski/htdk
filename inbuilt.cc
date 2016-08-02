@@ -1,7 +1,6 @@
 #include "inbuilt.h"
 
 #include <cstring>
-#include <vector>
 
 #include "label.h"
 
