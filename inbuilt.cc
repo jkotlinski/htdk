@@ -37,6 +37,17 @@ static const char plus[] = R"(:code +
     inx
     rts ;code)";
 
+static const char minus[] = R"(:code -
+    lda LSB + 1, x
+    sec
+    sbc LSB, x
+    sta LSB + 1, x
+    lda MSB + 1, x
+    sbc MSB, x
+    sta MSB + 1, x
+    inx
+    rts ;code)";
+
 static const char twoplus[] = R"(: 2+ 1+ 1+ ;)";
 
 static const char cfetch[] = R"(:code c@
@@ -146,6 +157,7 @@ const char* getDefinition(const char* wordName) {
         { "1+", oneplus },
         { "1-", oneminus },
         { "+", plus },
+        { "-", minus },
         { "2+", twoplus },
         { "pushya", pushya },
         { nullptr, nullptr }
