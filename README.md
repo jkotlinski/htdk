@@ -22,7 +22,7 @@ The resulting `code.prg` runs the user-defined word named `start`.
 
 #### Memory
 
-! @ c! c@
+! @ c! c@ fill
 
 #### Stack manipulation
 

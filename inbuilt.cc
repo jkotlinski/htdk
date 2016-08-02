@@ -205,6 +205,38 @@ static const char fetch[] = R"(:code @
     sta MSB,x
     rts ;code)";
 
+static const char fill[] = R"(:code fill
+    lda LSB, x
+    tay
+    lda LSB + 2, x
+    sta .fdst
+    lda MSB + 2, x
+    sta .fdst + 1
+    lda LSB + 1, x
+    eor #$ff
+    sta W
+    lda MSB + 1, x
+    eor #$ff
+    sta W + 1
+    inx
+    inx
+    inx
+-
+    inc W
+    bne +
+    inc W + 1
+    bne +
+    rts
++
+.fdst = * + 1
+    sty $ffff ; overwrite
+
+    ; advance
+    inc .fdst
+    bne -
+    inc .fdst + 1
+    jmp -)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -227,6 +259,7 @@ const char* getDefinition(const char* wordName) {
         { "c!", cstore },
         { "c@", cfetch },
         { "dup", dup },
+		{ "fill", fill },
         { "lit", lit },
         { "over", over },
         { "rot", rot },
