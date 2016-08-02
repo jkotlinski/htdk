@@ -6,16 +6,9 @@
 #include <cstring>
 #include <string>
 
-static bool is_decimal_integer(const char* s) {
-    if (!*s) {
-        return false;
-    }
-    if (*s == '#') {
-        ++s;
-        if (!*s) {
-            return false;
-        }
-    }
+static int base = 10;
+
+static bool is_integer(const char* s, int base) {
     if (*s == '-') {
         ++s;
         if (!*s) {
@@ -23,7 +16,12 @@ static bool is_decimal_integer(const char* s) {
         }
     }
     while (*s) {
-        if (!isdigit(*s)) {
+        int n = *s;
+        n -= '0';
+        if (n > '9') {
+            n += '0' - 'a' + 10;
+        }
+        if (n < 0 || n >= base) {
             return false;
         }
         ++s;
@@ -31,38 +29,27 @@ static bool is_decimal_integer(const char* s) {
     return true;
 }
 
+// Handles #nnnn.
+static bool is_decimal_integer(const char* s) {
+    if (!*s || *s != '#') {
+        return false;
+    }
+    return is_integer(s + 1, 10);
+}
+
+// Handles $nnnn.
 static bool is_hexadecimal_integer(const char* s) {
-    if (!*s) {
+    if (!*s || *s != '$') {
         return false;
     }
-    if (*s != '$') {
-        return false;
-    }
-    ++s;
-    if (!*s) {
-        return false;
-    }
-    if (*s == '-') {
-        ++s;
-        if (!*s) {
-            return false;
-        }
-    }
-    while (*s) {
-        if (!isdigit(*s) && (*s < 'a' || *s > 'f')) {
-            return false;
-        }
-        ++s;
-    }
-    return true;
+    return is_integer(s + 1, 10);
 }
 
 static bool is_number(const char* s) {
-    return is_decimal_integer(s) || is_hexadecimal_integer(s);
+    return is_decimal_integer(s) || is_hexadecimal_integer(s) || is_integer(s, base);
 }
 
-static int parse_hexadecimal_number(const char* s) {
-    ++s;  // Skip $
+static int parse_number(const char* s, int base) {
     bool negate = false;
     if (*s == '-') {
         negate = true;
@@ -70,12 +57,13 @@ static int parse_hexadecimal_number(const char* s) {
     }
     int i = 0;
     while (*s) {
-        i *= 16;
-        if (isdigit(*s)) {
-            i += *s - '0';
-        } else {
-            i += *s - 'a' + 10;
+        i *= base;
+        char c = *s;
+        c -= '0';
+        if (c > '9') {
+            c += '0' - 'a' + 10;
         }
+        i += c;
         ++s;
     }
     return negate ? -i : i;
@@ -83,9 +71,14 @@ static int parse_hexadecimal_number(const char* s) {
 
 static int parse_number(const char* s) {
     if (*s == '$') {
-        return parse_hexadecimal_number(s);
+        ++s;
+        return parse_number(s, 16);
     }
-    return atoi(s);
+    if (*s == '#') {
+        ++s;
+        return parse_number(s, 10);
+    }
+    return parse_number(s, base);
 }
 
 static void consumeWord(const char*& s) {
@@ -105,7 +98,11 @@ static Token token(const char*& s) {
     {
         const char* p = s;
         while (*p && !isspace(*p)) {
-            wordName += *p;
+            char c = *p;
+            if (c >= 'A' && c <= 'Z') {
+                c += 'a' - 'A';
+            }
+            wordName += c;
             ++p;
         }
     }
@@ -115,6 +112,10 @@ static Token token(const char*& s) {
             ++s;
         }
         ++s;
+        return token(s);
+    } else if (wordName == "hex") {
+        consumeWord(s);
+        base = 16;
         return token(s);
     } else if (wordName == ":") {
         consumeWord(s);
@@ -162,6 +163,7 @@ static Token token(const char*& s) {
         consumeWord(s);
         Token t(Number);
         t.intData = parse_number(wordName.c_str());
+        printf("parsed number %i\n", t.intData);
         return t;
     }
 
