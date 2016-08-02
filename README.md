@@ -6,15 +6,19 @@ Usage: `./htfc code.fs ; acme code.asm`
 
 The resulting `code.prg` runs the user-defined word named `start`.
 
-### Cross-compiled (target) words
+### Words
 
 #### Compiling
 
-;
+: ; :code ;code value
 
 #### Arithmetic
 
 1+ 2+ 1- + -
+
+#### Logic
+
+= 0= and
 
 #### Memory
 
@@ -27,12 +31,6 @@ drop rot swap over dup 2dup
 #### Control structures
 
 begin again
-
-### Interpreted (host) words
-
- * :
- * :code ;code
- * value
 
 ### Number format
 

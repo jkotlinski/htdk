@@ -137,6 +137,43 @@ static const char dup[] = R"(:code dup
 
 static const char twodup[] = R"(: 2dup over over ;)";
 
+static const char equal[] = R"(:code =
+    ldy #0
+    lda LSB, x
+    cmp LSB + 1, x
+    bne +
+    lda MSB, x
+    cmp MSB + 1, x
+    bne +
+    dey
++   inx
+    sty MSB, x
+    sty LSB, x
+    rts ;code)";
+
+static const char zequal[] = R"(:code 0=
+    ldy #0
+    lda MSB, x
+    bne +
+    lda LSB, x
+    bne +
+    dey
++   sty MSB, x
+    sty LSB, x
+    rts ;code)";
+
+static const char and_[] = R"(:code and
+    lda MSB, x
+    and MSB + 1, x
+    sta MSB + 1, x
+
+    lda LSB, x
+    and LSB + 1, x
+    sta LSB + 1, x
+
+    inx
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -145,6 +182,9 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "and", and_ },
+        { "=", equal },
+        { "0=", zequal },
         { "dup", dup },
         { "2dup", twodup },
         { "over", over },
