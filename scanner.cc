@@ -163,7 +163,6 @@ static Token token(const char*& s) {
         consumeWord(s);
         Token t(Number);
         t.intData = parse_number(wordName.c_str());
-        printf("parsed number %i\n", t.intData);
         return t;
     }
 
