@@ -238,8 +238,9 @@ static const char fill[] = R"(:code fill
     jmp -)";
 
 static const char ifcmp[] = R"(:code ifcmp
-    lda MSB,x
-    ora LSB,x
+    inx
+    lda MSB-1,x
+    ora LSB-1,x
     rts ;code)";
 
 // -----
