@@ -110,7 +110,13 @@ static Token token(const char*& s) {
         }
     }
 
-    if (wordName == ":") {
+    if (wordName == "\\") {  // Comment.
+        while (*s != '\n') {
+            ++s;
+        }
+        ++s;
+        return token(s);
+    } else if (wordName == ":") {
         consumeWord(s);
         return Token(Colon);
     } else if (wordName == ";") {
