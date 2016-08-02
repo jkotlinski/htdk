@@ -1,1 +1,3 @@
-: start begin 1 drop $d020 c@ 2+ $d020 c! again ;
+: start
+0 if 0 $d021 c! then
+;

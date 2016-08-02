@@ -80,6 +80,15 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fputs("\trts\n", f);
                 state = false;
                 break;
+            case If:
+                fprintf(f, "\tjsr ifcmp\n\tbeq .l%i\n", localLabel);
+                dictionary->markAsUsed("ifcmp");
+                stack.push_back(localLabel++);
+                break;
+            case Then:
+                fprintf(f, ".l%i:\n", stack.back());
+                stack.pop_back();
+                break;
             case Begin:
                 stack.push_back(localLabel);
                 fprintf(f, ".l%i:\n", localLabel++);

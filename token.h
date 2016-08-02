@@ -9,7 +9,9 @@ enum TokenType {
     Again,
     Value,
     Code,
-    Drop
+    Drop,
+    If,
+    Then
 };
 
 struct Token {

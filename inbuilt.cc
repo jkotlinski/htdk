@@ -237,6 +237,11 @@ static const char fill[] = R"(:code fill
     inc .fdst + 1
     jmp -)";
 
+static const char ifcmp[] = R"(:code ifcmp
+    lda MSB,x
+    ora LSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -264,6 +269,8 @@ const char* getDefinition(const char* wordName) {
         { "over", over },
         { "rot", rot },
         { "swap", swap },
+        // internal
+        { "ifcmp", ifcmp },
         { "pushya", pushya },
         { nullptr, nullptr }
     };
