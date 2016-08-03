@@ -270,6 +270,17 @@ static const char twomul[] = R"(:code 2*
     rol MSB,x
     rts ;code)";
 
+static const char depth[] = R"(:code depth
+    txa
+    eor #$ff
+    tay
+    iny
+    dex
+    sty LSB,x
+    lda #0
+    sta MSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -278,6 +289,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "depth", depth },
         { "2*", twomul },
         { "*", mul },
         { "!", store },
