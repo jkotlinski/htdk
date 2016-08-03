@@ -35,6 +35,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, "create must be followed by a word name!");
                     exit(1);
                 }
+                // printf("Create '%s'\n", it->stringData);
                 fprintf(f, "\n%s:\n", label(it->stringData).c_str());
                 dictionary->addWord(it->stringData);
                 free(it->stringData);
@@ -46,6 +47,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 free(it->stringData);
                 break;
             case Variable:
+                // puts("Variable");
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {
                     fprintf(stderr, "variable must be followed by a word name!");
@@ -74,6 +76,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     bool tailCall = (it != tokens.end() && it->type == SemiColon);
                     --it;
                     compileCall(f, "!", tailCall, dictionary);
+                    if (tailCall) {
+                        ++it;  // Skips ;
+                        state = false;
+                    }
                 }
                 break;
             case WordName:
@@ -86,6 +92,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     compileCall(f, it->stringData, tailCall, dictionary);
                     if (tailCall) {
                         ++it;  // Skips ;
+                        state = false;
                     }
                     free(it->stringData);
                 } else {
@@ -100,6 +107,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 }
                 break;
             case Number:
+                // puts("Number");
                 if (state) {
                     dictionary->markAsUsed("lit");
                     fprintf(f, "\tjsr lit\n\t!word %i\n", it->intData);
@@ -108,6 +116,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 }
                 break;
             case Code:
+                // puts("Code");
                 {
                     char* p = it->stringData;
                     std::string wordName;
