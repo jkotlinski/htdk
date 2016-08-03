@@ -243,6 +243,8 @@ static const char ifcmp[] = R"(:code ifcmp
     ora LSB-1,x
     rts ;code)";
 
+static const char mul[] = ": * m* drop ;";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -251,6 +253,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "*", mul },
         { "!", store },
         { "+", plus },
         { "-", minus },
