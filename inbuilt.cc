@@ -265,6 +265,11 @@ static const char zless[] = R"(:code 0<
     sta LSB,x
     rts ;code)";
 
+static const char twomul[] = R"(:code 2*
+    asl LSB,x
+    rol MSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -273,6 +278,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "2*", twomul },
         { "*", mul },
         { "!", store },
         { "+", plus },
