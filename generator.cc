@@ -94,8 +94,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 // printf("WordName %s\n", it->stringData);
                 assert(it->stringData);
                 if (state) {
-                    compileCall(f, it->stringData, tokens, &it, &state, dictionary);
-                    free(it->stringData);
+                    char* wordName = it->stringData;
+                    compileCall(f, wordName, tokens, &it, &state, dictionary);
+                    free(wordName);
                 } else {
                     char* wordName = it->stringData;
                     if (variableLabels.find(wordName) != variableLabels.end()) {
