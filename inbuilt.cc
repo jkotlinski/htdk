@@ -245,6 +245,15 @@ static const char ifcmp[] = R"(:code ifcmp
 
 static const char mul[] = ": * m* drop ;";
 
+static const char zless[] = R"(:code 0<
+    lda MSB,x
+    and #$80
+    beq +
+    lda #$ff
++   sta MSB,x
+    sta LSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -258,6 +267,7 @@ const char* getDefinition(const char* wordName) {
         { "+", plus },
         { "-", minus },
         { "0=", zequal },
+        { "0<", zless },
         { "1+", oneplus },
         { "1-", oneminus },
         { "2+", twoplus },
