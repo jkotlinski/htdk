@@ -24,6 +24,20 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Cells:
+                if (state) {
+                    ++it;
+                    bool tailCall = (it != tokens.end() && it->type == SemiColon);
+                    --it;
+                    compileCall(f, "2*", tailCall, dictionary);
+                    if (tailCall) {
+                        ++it;  // Skips ;
+                        state = false;
+                    }
+                } else {
+                    stack.back() *= 2;
+                }
+                break;
             case Allot:
                 assert(!stack.empty());
                 fprintf(f, "* = * + %i\n", stack.back());

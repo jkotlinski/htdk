@@ -17,7 +17,8 @@ enum TokenType {
     Store,
     String,
     Create,
-    Allot
+    Allot,
+    Cells
 };
 
 struct Token {

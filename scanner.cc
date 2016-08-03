@@ -168,6 +168,9 @@ static Token token(const char*& s) {
     } else if (wordName == "allot") {
         consumeWord(s);
         return Token(Allot);
+    } else if (wordName == "cells") {
+        consumeWord(s);
+        return Token(Cells);
     } else if (wordName == "create") {
         consumeWord(s);
         return Token(Create);
