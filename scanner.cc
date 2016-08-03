@@ -31,7 +31,7 @@ static bool is_integer(const char* s, int base) {
 
 // Handles #nnnn.
 static bool is_decimal_integer(const char* s) {
-    if (!*s || *s != '#') {
+    if (*s != '#') {
         return false;
     }
     return is_integer(s + 1, 10);
@@ -39,7 +39,7 @@ static bool is_decimal_integer(const char* s) {
 
 // Handles $nnnn.
 static bool is_hexadecimal_integer(const char* s) {
-    if (!*s || *s != '$') {
+    if (*s != '$') {
         return false;
     }
     return is_integer(s + 1, 10);
