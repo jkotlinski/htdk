@@ -9,8 +9,16 @@
 #include "dictionary.h"
 #include "label.h"
 
-static void compileCall(FILE* f, const char* wordName, bool tailCall, Dictionary* dictionary) {
+static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
+        Tokens::const_iterator* it, bool* state, Dictionary* dictionary) {
+    ++*it;
+    bool tailCall = (*it != tokens.end() && (*it)->type == SemiColon);
+    --*it;
     fprintf(f, tailCall ? "\tjmp %s\n" : "\tjsr %s\n", label(wordName).c_str());
+    if (tailCall) {
+        ++*it;  // Skips ;
+        *state = false;
+    }
     dictionary->markAsUsed(wordName);
 }
 
@@ -26,14 +34,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
         switch (it->type) {
             case Cells:
                 if (state) {
-                    ++it;
-                    bool tailCall = (it != tokens.end() && it->type == SemiColon);
-                    --it;
-                    compileCall(f, "2*", tailCall, dictionary);
-                    if (tailCall) {
-                        ++it;  // Skips ;
-                        state = false;
-                    }
+                    compileCall(f, "2*", tokens, &it, &state, dictionary);
                 } else {
                     stack.back() *= 2;
                 }
@@ -86,28 +87,14 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     undefinedVariables.erase(variableLabel);
                     break;
                 } else {
-                    ++it;
-                    bool tailCall = (it != tokens.end() && it->type == SemiColon);
-                    --it;
-                    compileCall(f, "!", tailCall, dictionary);
-                    if (tailCall) {
-                        ++it;  // Skips ;
-                        state = false;
-                    }
+                    compileCall(f, "!", tokens, &it, &state, dictionary);
                 }
                 break;
             case WordName:
                 // printf("WordName %s\n", it->stringData);
                 assert(it->stringData);
                 if (state) {
-                    ++it;
-                    bool tailCall = (it != tokens.end() && it->type == SemiColon);
-                    --it;
-                    compileCall(f, it->stringData, tailCall, dictionary);
-                    if (tailCall) {
-                        ++it;  // Skips ;
-                        state = false;
-                    }
+                    compileCall(f, it->stringData, tokens, &it, &state, dictionary);
                     free(it->stringData);
                 } else {
                     char* wordName = it->stringData;
