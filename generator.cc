@@ -24,6 +24,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Allot:
+                fprintf(f, "* = * + %i\n", stack.back());
+                stack.pop_back();
+                break;
             case Create:
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {
