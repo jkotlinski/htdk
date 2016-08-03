@@ -127,6 +127,17 @@ static const char over[] = R"(:code over
     sta LSB, x
     rts ;code)";
 
+static const char qdup[] = R"(:code ?dup
+    lda MSB,x
+    ora LSB,x
+    beq +
+    dex
+    lda MSB + 1, x
+    sta MSB, x
+    lda LSB + 1, x
+    sta LSB, x
++   rts ;code)";
+
 static const char dup[] = R"(:code dup
     dex
     lda MSB + 1, x
@@ -278,6 +289,7 @@ const char* getDefinition(const char* wordName) {
         { "c!", cstore },
         { "c@", cfetch },
         { "dup", dup },
+        { "?dup", qdup },
 		{ "fill", fill },
         { "lit", lit },
         { "over", over },

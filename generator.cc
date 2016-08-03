@@ -9,7 +9,6 @@
 #include "dictionary.h"
 #include "label.h"
 
-
 static void compileCall(FILE* f, const char* wordName, bool tailCall, Dictionary* dictionary) {
     fprintf(f, tailCall ? "\tjmp %s\n" : "\tjsr %s\n", label(wordName).c_str());
     dictionary->markAsUsed(wordName);

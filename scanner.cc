@@ -187,16 +187,10 @@ static Token token(const char*& s) {
         return t;
     }
 
-    const char* p = s;
-    std::string str;
-    while (!isspace(*p)) {
-        str += *p;
-        ++p;
-    }
     Token t(WordName);
-    t.stringData = (char*)malloc(str.length() + 1);
+    t.stringData = (char*)malloc(wordName.length() + 1);
     assert(t.stringData);
-    strcpy(t.stringData, str.c_str());
+    strcpy(t.stringData, wordName.c_str());
     consumeWord(s);
     return t;
 }
