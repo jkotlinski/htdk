@@ -15,7 +15,8 @@ enum TokenType {
     Else,
     Variable,
     Store,
-    String
+    String,
+    Create
 };
 
 struct Token {

@@ -24,6 +24,16 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Create:
+                ++it;
+                if (it == tokens.end() || it->type != WordName) {
+                    fprintf(stderr, "create must be followed by a word name!");
+                    exit(1);
+                }
+                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
+                dictionary->addWord(it->stringData);
+                free(it->stringData);
+                break;
             case String:
                 fprintf(f, "\tjsr litstring\n!byte %i\n!text \"%s\"\n",
                         (int)strlen(it->stringData), it->stringData);

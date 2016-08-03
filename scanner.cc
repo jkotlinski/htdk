@@ -165,6 +165,9 @@ static Token token(const char*& s) {
     } else if (wordName == "variable") {
         consumeWord(s);
         return Token(Variable);
+    } else if (wordName == "create") {
+        consumeWord(s);
+        return Token(Create);
     } else if (wordName == "else") {
         consumeWord(s);
         return Token(Else);
