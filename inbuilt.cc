@@ -455,6 +455,31 @@ static const char xor_[] = R"(:code xor
     inx
     rts ;code)";
 
+static const char twodiv[] = R"(:code 2/
+    lda MSB,x
+    cmp #$80
+    ror MSB,x
+    ror LSB,x
+    rts ;code)";
+
+static const char lshift[] = R"(:code lshift
+    dec LSB,x
+    bmi +
+    asl LSB+1,x
+    rol MSB+1,x
+    jmp lshift
++   inx
+    rts ;code)";
+
+static const char rshift[] = R"(:code rshift
+    dec LSB,x
+    bmi +
+    lsr LSB+1,x
+    ror MSB+1,x
+    jmp rshift
++   inx
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -463,6 +488,9 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "rshift", rshift },
+        { "lshift", lshift },
+        { "2/", twodiv },
         { "2drop", twodrop },
         { "type", type },
         { "quit", quit },
