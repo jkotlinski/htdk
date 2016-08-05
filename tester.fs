@@ -272,6 +272,15 @@ T{ 1 2 OVER -> 1 2 1 }T
 T{ 1 2 3 ROT -> 2 3 1 }T
 T{ 1 2 SWAP -> 2 1 }T ;
 
+\ -----
+
+: GR1 >R R> ;
+: GR2 >R R@ R> DROP ;
+: test-return-stack s" >R R> R@" testing
+T{ 123 GR1 -> 123 }T
+T{ 123 GR2 -> 123 }T
+T{ 1S GR1 -> 1S }T   ( RETURN STACK HOLDS CELLS ) ;
+
 : start
 $16 $d018 c! \ upper/lowercase
 test-basic-assumptions
@@ -279,4 +288,5 @@ test-booleans
 test-shift
 test-compare
 test-stack
+test-return-stack
 cr s" OK" testing ;
