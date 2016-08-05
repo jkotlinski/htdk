@@ -92,23 +92,24 @@ static void consumeWord(const char*& s) {
     }
 }
 
+static std::string toLowerCase(const char* s) {
+    std::string word;
+    while (*s && !isspace(*s)) {
+        char c = *s;
+        if (c >= 'A' && c <= 'Z') {
+            c += 'a' - 'A';
+        }
+        word += c;
+        ++s;
+    }
+    return word;
+}
+
 static Token token(const char*& s) {
     while (isspace(*s)) {
         ++s;
     }
-    std::string wordName;
-    {
-        const char* p = s;
-        while (*p && !isspace(*p)) {
-            char c = *p;
-            if (c >= 'A' && c <= 'Z') {
-                c += 'a' - 'A';
-            }
-            wordName += c;
-            ++p;
-        }
-    }
-
+    const std::string wordName = toLowerCase(s);
     if (wordName == "\\") {  // Comment.
         while (*s != '\n') {
             ++s;
