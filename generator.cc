@@ -39,7 +39,8 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     std::deque<int> stack;
-    int loopDepth = 0;
+    std::deque<int> loopStack;
+    int loopCounter = 0;
     int localLabel = 0;
     bool state = false;
     std::set<int> undefinedVariables;
@@ -51,12 +52,12 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case Loop:
                 fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n\tjmp .l%i\n.loopexit_%i:\n",
                         stack.back(),
-                        --loopDepth);
-                stack.pop_back();
+                        loopStack.back());
+                loopStack.pop_back();
                 dictionary->markAsUsed("(loop)");
                 break;
             case Leave:
-                fprintf(f, "\tjsr unloop\n\tjmp .loopexit_%i\n", loopDepth);
+                fprintf(f, "\tjsr unloop\n\tjmp .loopexit_%i\n", loopStack.back());
                 dictionary->markAsUsed("unloop");
                 break;
             case I:
@@ -69,9 +70,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 break;
             case Do:
                 assert(state);
-                fprintf(f, "\tjsr " LPAREN "do" RPAREN "\n.l%i:\n", localLabel);
+                fprintf(f, "\tjsr " LPAREN "do" RPAREN "\t; loop %i\n.l%i:\n", loopCounter, localLabel);
                 dictionary->markAsUsed("(do)");
-                ++loopDepth;
+                loopStack.push_back(loopCounter++);
                 stack.push_back(localLabel++);
                 break;
             case Cells:
