@@ -474,8 +474,8 @@ static const char lshift[] = R"(:code lshift
 static const char rshift[] = R"(:code rshift
     dec LSB,x
     bmi +
-    lsr LSB+1,x
-    ror MSB+1,x
+    lsr MSB+1,x
+    ror LSB+1,x
     jmp rshift
 +   inx
     rts ;code)";
