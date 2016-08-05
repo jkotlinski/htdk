@@ -49,14 +49,9 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
          LOOP
       THEN
    ELSE               \ DEPTH MISMATCH
-      S" WRONG NUMBER OF RESULTS: " ERROR
+      S" WRONG NUMBER OF RESULTS" ERROR
    THEN ;
 
-\ : TESTING   \ ( -- ) TALKING COMMENT.
-\   SOURCE VERBOSE @
-\    IF DUP >R TYPE CR R> >IN !
-\    ELSE >IN ! DROP [CHAR] * EMIT
-\    THEN ;
 : testing type cr ;
 
 \ ====== Imported from core test suite
