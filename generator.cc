@@ -24,8 +24,10 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
     ++*it;
     bool tailCall = (*it != tokens.end() && (*it)->type == SemiColon);
     const char** tceIt = noTailCallEliminationWords;
-    while (*tceIt) {
-        tailCall &= !strcmp(wordName, *tceIt);
+    while (tailCall && *tceIt) {
+        if (!strcmp(wordName, *tceIt)) {
+            tailCall = false;
+        }
         ++tceIt;
     }
     --*it;
