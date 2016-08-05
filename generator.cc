@@ -9,6 +9,9 @@
 #include "dictionary.h"
 #include "label.h"
 
+#define LPAREN "_28"
+#define RPAREN "_29"
+
 static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
         Tokens::const_iterator* it, bool* state, Dictionary* dictionary) {
     ++*it;
@@ -163,8 +166,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 state = false;
                 break;
             case If:
-                fprintf(f, "\tjsr ifcmp\n\tbeq .l%i\n", localLabel);
-                dictionary->markAsUsed("ifcmp");
+                fprintf(f, "\tjsr " LPAREN "if" RPAREN "\n\tbeq .l%i\n", localLabel);
+                dictionary->markAsUsed("(if)");
                 stack.push_back(localLabel++);
                 break;
             case Else:

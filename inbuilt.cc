@@ -248,7 +248,7 @@ static const char fill[] = R"(:code fill
     inc .fdst + 1
     jmp -)";
 
-static const char ifcmp[] = R"(:code ifcmp
+static const char ifcmp[] = R"(:code (if)
     inx
     lda MSB-1,x
     ora LSB-1,x
@@ -314,7 +314,7 @@ const char* getDefinition(const char* wordName) {
         { "rot", rot },
         { "swap", swap },
         // internal
-        { "ifcmp", ifcmp },
+        { "(if)", ifcmp },
         { "pushya", pushya },
         { nullptr, nullptr }
     };
