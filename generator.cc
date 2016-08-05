@@ -113,7 +113,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 }
                 // printf("Create '%s'\n", it->stringData);
                 fprintf(f, "\n%s:\n", label(it->stringData).c_str());
+                fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n");
                 dictionary->addWord(it->stringData);
+                dictionary->markAsUsed("(pushya)");
                 free(it->stringData);
                 break;
             case String:
