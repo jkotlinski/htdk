@@ -317,6 +317,8 @@ static const char rat[] = R"(:code r@
     sta LSB,x
     rts ;code)";
 
+static const char cr[] = ": cr $d emit ;";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -325,6 +327,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "cr", cr },
         { "r@", rat },
         { "depth", depth },
         { "2*", twomul },
