@@ -24,13 +24,8 @@ VARIABLE VERBOSE
 
 VARIABLE #ERRORS 0 #ERRORS !
 
-: ERROR      \ ( C-ADDR U -- ) DISPLAY AN ERROR MESSAGE FOLLOWED BY
-      \ THE LINE THAT HAD THE ERROR.
-   CR TYPE \ SOURCE TYPE       \ DISPLAY LINE CORRESPONDING TO ERROR
-   EMPTY-STACK               \ THROW AWAY EVERY THING ELSE
-   #ERRORS @ 1 + #ERRORS !
-   QUIT  \ *** Uncomment this line to QUIT on an error
-;
+: ERROR      \ ( C-ADDR U -- ) DISPLAY AN ERROR MESSAGE
+testing QUIT ;
 
 VARIABLE ACTUAL-DEPTH         \ STACK RECORD
 CREATE ACTUAL-RESULTS 20 CELLS ALLOT
@@ -50,7 +45,7 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
       DEPTH ?DUP IF         \ IF THERE IS SOMETHING ON THE STACK
          0  DO            \ FOR EACH STACK ITEM
            ACTUAL-RESULTS I CELLS + @   \ COMPARE ACTUAL WITH EXPECTED
-           = 0= IF S" INCORRECT RESULT: " ERROR LEAVE THEN
+           = 0= IF S" INCORRECT RESULT" ERROR LEAVE THEN
          LOOP
       THEN
    ELSE               \ DEPTH MISMATCH
@@ -110,4 +105,4 @@ T{ 1S 1S XOR -> 0S }T ;
 $16 $d018 c! \ upper/lowercase
 test-basic-assumptions
 test-booleans
-s" ok" type ;
+cr s" OK" testing ;
