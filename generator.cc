@@ -262,4 +262,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 break;
         }
     }
+
+    while (!undefinedVariables.empty()) {
+        fprintf(f, "vl_%i = 0 ; undefined\n", *undefinedVariables.begin());
+        undefinedVariables.erase(undefinedVariables.begin());
+    }
 }
