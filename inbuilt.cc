@@ -366,15 +366,15 @@ static const char loop[] = R"(:code (loop)
     inc 104,x
 +   lda 103,x
     cmp 105,x
-    beq .1
-.2:
+    beq +
+-
 	; loop not finished, return
     ldx W
 	rts
-.1:
++
 	lda 104,x
 	cmp 106,x
-	bne .2
+	bne -
 
 	; loop done
 	pla
