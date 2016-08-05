@@ -62,11 +62,13 @@ CREATE ACTUAL-RESULTS 20 CELLS ALLOT
 \    IF DUP >R TYPE CR R> >IN !
 \    ELSE >IN ! DROP [CHAR] * EMIT
 \    THEN ;
+: testing type cr ;
 
 \ ====== Imported from core test suite
 
 : BITSSET? IF 0 0 ELSE 0 THEN ;
 : test-basic-assumptions
+s" BASIC ASSUMPTIONS" testing
 T{ -> }T               \ START WITH CLEAN SLATE
 \ ( TEST IF ANY BITS ARE SET; ANSWER IN BASE 1 )
 T{  0 BITSSET? -> 0 }T      ( ZERO IS ALL BITS CLEAR )
@@ -77,6 +79,7 @@ T{ -1 BITSSET? -> 0 0 }T ;
 ffff CONSTANT 1S
 
 : test-booleans
+s" BOOLEANS: INVERT AND OR XOR" testing
 T{ 0 0 AND -> 0 }T
 T{ 0 1 AND -> 0 }T
 T{ 1 0 AND -> 0 }T
@@ -104,6 +107,7 @@ T{ 1S 0S XOR -> 1S }T
 T{ 1S 1S XOR -> 0S }T ;
 
 : start
+$16 $d018 c! \ upper/lowercase
 test-basic-assumptions
 test-booleans
 s" ok" type ;
