@@ -404,7 +404,7 @@ static const char invert[] = R"(:code invert
     rts ;code)";
 
 static const char quit[] = R"(:code quit
-    ldx #$ff
+    ldx #$fd
     txs
     rts ;code)";
 
