@@ -74,6 +74,5 @@ T{  1 BITSSET? -> 0 0 }T      ( OTHER NUMBER HAVE AT LEAST ONE BIT )
 T{ -1 BITSSET? -> 0 0 }T ;
 
 : start
-10 0 do i $30 + emit cr loop
 test-basic-assumptions
 ;

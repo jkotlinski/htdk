@@ -383,19 +383,19 @@ static const char branch[] = R"(:code (branch)
 static const char loop[] = R"(:code (loop)
     stx W
     tsx
-    inc 103,x
+    inc $103,x
     bne +
-    inc 104,x
-+   lda 103,x
-    cmp 105,x
+    inc $104,x
++   lda $103,x
+    cmp $105,x
     beq +
 -
 	; loop not finished, return
     ldx W
 	rts
 +
-	lda 104,x
-	cmp 106,x
+	lda $104,x
+	cmp $106,x
 	bne -
 
 	; loop done
