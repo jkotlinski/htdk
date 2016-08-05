@@ -39,6 +39,7 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     std::deque<int> stack;
+    std::deque<int> leaveStack;
     int localLabel = 0;
     bool state = false;
     std::set<int> undefinedVariables;
@@ -59,6 +60,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 assert(state);
                 fprintf(f, "\tjsr " LPAREN "do" RPAREN "\n.l%i:\n", localLabel);
                 dictionary->markAsUsed("(do)");
+                leaveStack.push_back(localLabel);
                 stack.push_back(localLabel++);
                 break;
             case Cells:
