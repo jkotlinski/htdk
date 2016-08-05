@@ -49,7 +49,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
             case Loop:
-                fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n\tjmp .l%i\n.loopexit_%i\n:",
+                fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n\tjmp .l%i\n.loopexit_%i:\n",
                         stack.back(),
                         --loopDepth);
                 stack.pop_back();
