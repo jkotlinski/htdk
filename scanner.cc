@@ -180,11 +180,11 @@ static Token token(const char*& s) {
             ++s;
         }
         std::string stringData;
-        while (!isspace(s[0]) || s[1] != '"' || !isspace(s[2])) {
+        while (*s != '"') {
             stringData.push_back(*s);
             ++s;
         }
-        s += 3;
+        ++s;
         Token t(String);
         t.stringData = (char*)malloc(stringData.size() + 1);
         strcpy(t.stringData, stringData.c_str());

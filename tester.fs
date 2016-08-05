@@ -106,4 +106,4 @@ T{ 1S 1S XOR -> 0S }T ;
 : start
 test-basic-assumptions
 test-booleans
-;
+s" ok" type ;
