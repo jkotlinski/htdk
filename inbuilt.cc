@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 
-static const char pushya[] = R"(:code pushya
+static const char pushya[] = R"(:code (pushya)
     dex
     sta LSB,x
     sty MSB,x
@@ -315,7 +315,7 @@ const char* getDefinition(const char* wordName) {
         { "swap", swap },
         // internal
         { "(if)", ifcmp },
-        { "pushya", pushya },
+        { "(pushya)", pushya },
         { nullptr, nullptr }
     };
     const Pair* it = defs;

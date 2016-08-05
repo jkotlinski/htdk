@@ -73,7 +73,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 }
                 fprintf(f, "\n%s:\n", label(it->stringData).c_str());
                 dictionary->addWord(it->stringData);
-                fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp pushya\n+\n!word vl_%i\n", variableLabel);
+                fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n!word vl_%i\n", variableLabel);
                 undefinedVariables.insert(variableLabel);
                 variableLabels[it->stringData] = variableLabel;
                 ++variableLabel;
@@ -197,7 +197,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 dictionary->addWord(it->stringData);
                 fprintf(f, "\tlda #%i\n", stack.back() & 0xff);
                 fprintf(f, "\tldy #%i\n", stack.back() >> 8);
-                fprintf(f, "\tjmp pushya\n");
+                fprintf(f, "\tjmp " LPAREN "pushya" RPAREN "\n");
                 stack.pop_back();
                 dictionary->markAsUsed("pushya");
                 free(it->stringData);
