@@ -21,7 +21,8 @@ enum TokenType {
     Allot,
     Cells,
     Do,
-    I
+    I,
+    Leave
 };
 
 struct Token {
