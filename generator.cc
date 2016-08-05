@@ -35,6 +35,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case None:
+                assert(!"Invalid token");
+                break;
             case Cells:
                 if (state) {
                     compileCall(f, "2*", tokens, &it, &state, dictionary);

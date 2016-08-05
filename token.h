@@ -1,6 +1,7 @@
 #pragma once
 
 enum TokenType {
+    None,
     WordName,
     Number,
     Colon,

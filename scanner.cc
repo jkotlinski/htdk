@@ -105,11 +105,51 @@ static std::string toLowerCase(const char* s) {
     return word;
 }
 
+static TokenType getSimpleToken(const std::string& wordName) {
+    struct SimpleScannedWord {
+        const char* name;
+        TokenType tokenType;
+    };
+    static const SimpleScannedWord simpleScannedWords[] = {
+        { ":", Colon },
+        { ";", SemiColon },
+        { "if", If },
+        { "then", Then },
+        { "variable", Variable },
+        { "allot", Allot },
+        { "cells", Cells },
+        { "create", Create },
+        { "else", Else },
+        { "!", Store },
+        { "begin", Begin },
+        { "again", Again },
+        { "value", Value },
+        { nullptr, None }
+    };
+    const SimpleScannedWord* it = simpleScannedWords;
+    while (it->name) {
+        if (wordName == it->name) {
+            return it->tokenType;
+        }
+        ++it;
+    }
+    return None;
+}
+
 static Token token(const char*& s) {
     while (isspace(*s)) {
         ++s;
     }
     const std::string wordName = toLowerCase(s);
+
+    {
+        const TokenType tokenType = getSimpleToken(wordName);
+        if (tokenType != None) {
+            consumeWord(s);
+            return Token(tokenType);
+        }
+    }
+
     if (wordName == "\\") {  // Comment.
         while (*s != '\n') {
             ++s;
@@ -120,12 +160,6 @@ static Token token(const char*& s) {
         consumeWord(s);
         base = 16;
         return token(s);
-    } else if (wordName == ":") {
-        consumeWord(s);
-        return Token(Colon);
-    } else if (wordName == ";") {
-        consumeWord(s);
-        return Token(SemiColon);
     } else if (wordName == "s\"") {
         s += strlen("s\" ");
         while (isspace(*s)) {
@@ -159,39 +193,6 @@ static Token token(const char*& s) {
         t.stringData = (char*)malloc(code.size() + 1);
         strcpy(t.stringData, code.c_str());
         return t;
-    } else if (wordName == "if") {
-        consumeWord(s);
-        return Token(If);
-    } else if (wordName == "then") {
-        consumeWord(s);
-        return Token(Then);
-    } else if (wordName == "variable") {
-        consumeWord(s);
-        return Token(Variable);
-    } else if (wordName == "allot") {
-        consumeWord(s);
-        return Token(Allot);
-    } else if (wordName == "cells") {
-        consumeWord(s);
-        return Token(Cells);
-    } else if (wordName == "create") {
-        consumeWord(s);
-        return Token(Create);
-    } else if (wordName == "else") {
-        consumeWord(s);
-        return Token(Else);
-    } else if (wordName == "!") {
-        consumeWord(s);
-        return Token(Store);
-    } else if (wordName == "begin") {
-        consumeWord(s);
-        return Token(Begin);
-    } else if (wordName == "again") {
-        consumeWord(s);
-        return Token(Again);
-    } else if (wordName == "value") {
-        consumeWord(s);
-        return Token(Value);
     } else if (is_number(wordName.c_str())) {
         consumeWord(s);
         Token t(Number);
