@@ -343,6 +343,55 @@ static const char tor[] = R"(:code >r
     inx
     jmp (W) ;code)";
 
+static const char branch[] = R"(:code (branch)
+    pla
+    sta W
+    pla
+    sta W + 1
+
+    ldy #2
+    lda (W), y
+    sta + + 2
+    dey
+    lda (W), y
+    sta + + 1
++   jmp $1234
+;code)";
+
+static const char loop[] = R"(:code (loop)
+    stx W
+    tsx
+    inc 103,x
+    bne +
+    inc 104,x
++   lda 103,x
+    cmp 105,x
+    beq .1
+.2:
+	; loop not finished, return
+    ldx W
+	rts
+.1:
+	lda 104,x
+	cmp 106,x
+	bne .2
+
+	; loop done
+	pla
+	clc
+	adc #4 ; skip loop jmp in calling code
+	sta W2
+	pla
+	adc #0
+	sta W2+1
+	txa
+	clc
+	adc #6 ; pop loop counters
+	tax
+	txs
+	ldx W
+	jmp (W2) ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -351,6 +400,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "(loop)", loop },
         { ">r", tor },
         { "emit", emit },
         { "cr", cr },
