@@ -343,6 +343,22 @@ static const char tor[] = R"(:code >r
     inx
     jmp (W) ;code)";
 
+static const char rto[] = R"(:code r>
+    pla
+    sta W
+    pla
+    sta W+1
+    inc W
+    bne +
+    inc W+1
++
+    dex
+    pla
+    sta LSB,x
+    pla
+    sta MSB,x
+    jmp (W) ;code)";
+
 static const char branch[] = R"(:code (branch)
     pla
     sta W
@@ -404,6 +420,7 @@ static const char invert[] = R"(:code invert
     rts ;code)";
 
 static const char quit[] = R"(:code quit
+    ; Returns to the address on the bottom of the return stack.
     ldx #$fd
     txs
     rts ;code)";
@@ -419,6 +436,7 @@ const char* getDefinition(const char* wordName) {
         { "quit", quit },
         { "invert", invert },
         { ">r", tor },
+        { "r>", rto },
         { "emit", emit },
         { "cr", cr },
         { "r@", rat },
