@@ -403,6 +403,11 @@ static const char invert[] = R"(:code invert
     sta LSB,x
     rts ;code)";
 
+static const char quit[] = R"(:code quit
+    ldx #$ff
+    txs
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -411,6 +416,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "quit", quit },
         { "invert", invert },
         { ">r", tor },
         { "emit", emit },
