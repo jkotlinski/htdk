@@ -37,7 +37,7 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
     dictionary->markAsUsed(wordName);
 }
 
-static void create(FILE* f, const Tokens& tokens, Tokens::const_iterator* it, Dictionary* dictionary) {
+static std::string create(FILE* f, const Tokens& tokens, Tokens::const_iterator* it, Dictionary* dictionary) {
     ++*it;
     if (*it == tokens.end() || (*it)->type != WordName) {
         fprintf(stderr, "create must be followed by a word name!");
@@ -45,9 +45,11 @@ static void create(FILE* f, const Tokens& tokens, Tokens::const_iterator* it, Di
     }
     fprintf(f, "\n%s:\n", label((*it)->stringData).c_str());
     fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n");
+    const std::string name = (*it)->stringData;
     dictionary->addWord((*it)->stringData);
     dictionary->markAsUsed("(pushya)");
     free((*it)->stringData);
+    return name;
 }
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
@@ -135,11 +137,12 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 free(it->stringData);
                 break;
             case Variable:
-                create(f, tokens, &it, dictionary);
-                fprintf(f, "!word vl_%i\n", variableLabel);
-                undefinedVariables.insert(variableLabel);
-                variableLabels[it->stringData] = variableLabel;
-                ++variableLabel;
+                {
+                    const std::string name = create(f, tokens, &it, dictionary);
+                    fprintf(f, "!word vl_%i\n", variableLabel);
+                    undefinedVariables.insert(variableLabel);
+                    variableLabels[name] = variableLabel++;
+                }
                 break;
             case Store:
                 if (!state) {
