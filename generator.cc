@@ -37,14 +37,15 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
     dictionary->markAsUsed(wordName);
 }
 
+static int loopCounter;
+static int localLabel;
+static int variableLabel;
+
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     std::deque<int> stack;
     std::deque<int> loopStack;
-    int loopCounter = 0;
-    int localLabel = 0;
     bool state = false;
     std::set<int> undefinedVariables;
-    int variableLabel = 0;
     std::map<std::string, int> variableLabels;
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
