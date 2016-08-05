@@ -20,7 +20,8 @@ enum TokenType {
     Create,
     Allot,
     Cells,
-    Do
+    Do,
+    I
 };
 
 struct Token {

@@ -47,6 +47,11 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case I:
+                assert(state);
+                fprintf(f, "\tjsr r_40\t; i\n");
+                dictionary->markAsUsed("r@");
+                break;
             case None:
                 assert(!"Invalid token");
                 break;
