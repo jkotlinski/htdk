@@ -431,6 +431,10 @@ static const char quit[] = R"(:code quit
     txs
     rts ;code)";
 
+static const char twodrop[] = ": 2drop drop drop ;";
+
+static const char unloop[] = ": unloop r> r> r> 2drop >r ;";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -439,6 +443,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "2drop", twodrop },
         { "type", type },
         { "quit", quit },
         { "invert", invert },
@@ -471,6 +476,7 @@ const char* getDefinition(const char* wordName) {
         { "rot", rot },
         { "swap", swap },
         { "negate", negate },
+        { "unloop", unloop },
         // internal
         { "(loop)", loop },
         { "(do)", do_ },
