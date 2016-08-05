@@ -125,13 +125,6 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case Create:
                 create(f, tokens, &it, dictionary);
                 break;
-            case Invert:
-                if (state) {
-                    compileCall(f, "invert", tokens, &it, &state, dictionary);
-                } else {
-                    stack.back() ^= -1;
-                }
-                break;
             case String:
                 fprintf(f, "\tjsr " LPAREN "litstring" RPAREN "\n!byte %i\n!text \"%s\"\n",
                         (int)strlen(it->stringData), it->stringData);

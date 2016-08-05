@@ -554,6 +554,67 @@ static const char twoswap[] = R"(:code 2swap
 static const char qnegate[] = ": ?negate 0< if negate then ;";
 static const char abs_[] = ": abs dup ?negate ;";
 
+static const char dnegate[] = ": dnegate invert >r invert r> 1 m+ ;";
+static const char qdnegate[] = ": ?dnegate 0< if dnegate then ;";
+static const char mmul[] = ": m* 2dup xor >r >r abs r> abs um* r> ?dnegate ;";
+static const char sgtd[] = ": s>d dup 0< ;";
+
+static const char mplus[] = R"(:code m+
+    ldy #0
+    lda MSB,x
+    bpl +
+    dey
++   clc
+    lda LSB,x
+    adc LSB+2,x
+    sta LSB+2,x
+    lda MSB,x
+    adc MSB+2,x
+    sta MSB+2,x
+    tya
+    adc LSB+1,x
+    sta LSB+1,x
+    tya
+    adc MSB+1,x
+    sta MSB+1,x
+    inx
+    rts ;code)";
+
+static const char ummul[] = R"(:code um*
+product = W
+    lda #0
+    sta product+2 ; clear upper bits of product
+    sta product+3
+    ldy #$10 ; set binary count to 16
+.shift_r
+    lsr MSB + 1, x ; multiplier+1 ; divide multiplier by 2
+    ror LSB + 1, x ; multiplier
+    bcc rotate_r
+    lda product+2 ; get upper half of product and add multiplicand
+    clc
+    adc LSB, x ; multiplicand
+    sta product+2
+    lda product+3
+    adc MSB, x ; multiplicand+1
+rotate_r
+    ror ; rotate partial product
+    sta product+3
+    ror product+2
+    ror product+1
+    ror product
+    dey
+    bne .shift_r
+
+    lda product
+    sta LSB + 1, x
+    lda product + 1
+    sta MSB + 1, x
+    lda product + 2
+    sta LSB, x
+    lda product + 3
+    sta MSB, x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -562,6 +623,12 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "um*", ummul },
+        { "s>d", sgtd },
+        { "m+", mplus },
+        { "dnegate", dnegate },
+        { "?dnegate", qdnegate },
+        { "m*", mmul },
         { "?negate", qnegate },
         { "abs", abs_ },
         { "2swap", twoswap },
