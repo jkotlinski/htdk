@@ -13,5 +13,18 @@ std::string label(const char* word) {
         }
         ++word;
     }
+
+    const char* protected_words[] = {
+        "and",
+        nullptr
+    };
+    const char** it = protected_words;
+    while (*it) {
+        if (s == *it) {
+            s += '_';
+        }
+        ++it;
+    }
+
     return s;
 }

@@ -241,6 +241,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fprintf(f, "\tjmp .l%i\n", stack.back());
                 stack.pop_back();
                 break;
+            case Constant:
             case Value:
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {

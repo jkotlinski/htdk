@@ -435,6 +435,26 @@ static const char twodrop[] = ": 2drop drop drop ;";
 
 static const char unloop[] = ": unloop r> r> r> 2drop >r ;";
 
+static const char or_[] = R"(:code or
+    lda MSB,x
+    ora MSB+1,x
+    sta MSB+1,x
+    lda LSB,x
+    ora LSB+1,x
+    sta LSB+1,x
+    inx
+    rts ;code)";
+
+static const char xor_[] = R"(:code xor
+    lda MSB,x
+    eor MSB+1,x
+    sta MSB+1,x
+    lda LSB,x
+    eor LSB+1,x
+    sta LSB+1,x
+    inx
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -477,6 +497,8 @@ const char* getDefinition(const char* wordName) {
         { "swap", swap },
         { "negate", negate },
         { "unloop", unloop },
+        { "or", or_ },
+        { "xor", xor_ },
         // internal
         { "(loop)", loop },
         { "(do)", do_ },

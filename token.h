@@ -25,7 +25,8 @@ enum TokenType {
     Leave,
     Loop,
     Repeat,
-    While
+    While,
+    Constant
 };
 
 struct Token {
