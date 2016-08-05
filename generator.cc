@@ -38,6 +38,12 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case None:
                 assert(!"Invalid token");
                 break;
+            case Do:
+                assert(state);
+                fprintf(f, "\tjsr " LPAREN "do" RPAREN "\n.l%i:\n", localLabel);
+                dictionary->markAsUsed("(do)");
+                stack.push_back(localLabel++);
+                break;
             case Cells:
                 if (state) {
                     compileCall(f, "2*", tokens, &it, &state, dictionary);

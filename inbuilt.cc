@@ -281,6 +281,29 @@ static const char depth[] = R"(:code depth
     sta MSB,x
     rts ;code)";
 
+static const char do_[] = R"(:code (do) ; ( limit first -- )
+    pla
+    sta W
+    pla
+    tay
+
+    lda MSB+1,x
+    pha
+    lda LSB+1,x
+    pha
+    lda MSB,x
+    pha
+    lda LSB,x
+    pha
+    inx
+    inx
+
+    tya
+    pha
+    lda W
+    pha
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -289,6 +312,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "(do)", do_ },
         { "depth", depth },
         { "2*", twomul },
         { "*", mul },
