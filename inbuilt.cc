@@ -392,6 +392,17 @@ static const char loop[] = R"(:code (loop)
 	ldx W
 	jmp (W2) ;code)";
 
+static const char negate[] = ": negate invert 1+ ;";
+
+static const char invert[] = R"(:code invert
+    lda MSB,x
+    eor #$ff
+    sta MSB,x
+    lda LSB,x
+    eor #$ff
+    sta LSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -400,7 +411,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
-        { "(loop)", loop },
+        { "invert", invert },
         { ">r", tor },
         { "emit", emit },
         { "cr", cr },
@@ -428,7 +439,9 @@ const char* getDefinition(const char* wordName) {
         { "over", over },
         { "rot", rot },
         { "swap", swap },
+        { "negate", negate },
         // internal
+        { "(loop)", loop },
         { "(do)", do_ },
         { "(lit)", lit },
         { "(litstring)", litstring },
