@@ -39,7 +39,7 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
 
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     std::deque<int> stack;
-    std::deque<std::deque<int>> leaveStack;
+    int loopDepth = 0;
     int localLabel = 0;
     bool state = false;
     std::set<int> undefinedVariables;
@@ -48,8 +48,15 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Loop:
+                fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n!word .l%i\n.loopexit_%i\n:",
+                        stack.back(),
+                        --loopDepth);
+                stack.pop_back();
+                dictionary->markAsUsed("(loop)");
+                break;
             case Leave:
-                fprintf(f, "\tjsr unloop\n\tjmp .leave_%i\n", (int)leaveStack.back().size());
+                fprintf(f, "\tjsr unloop\n\tjmp .loopexit_%i\n", loopDepth);
                 dictionary->markAsUsed("unloop");
                 break;
             case I:
@@ -64,7 +71,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 assert(state);
                 fprintf(f, "\tjsr " LPAREN "do" RPAREN "\n.l%i:\n", localLabel);
                 dictionary->markAsUsed("(do)");
-                leaveStack.resize(leaveStack.size() + 1);
+                ++loopDepth;
                 stack.push_back(localLabel++);
                 break;
             case Cells:

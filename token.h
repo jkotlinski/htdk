@@ -22,7 +22,8 @@ enum TokenType {
     Cells,
     Do,
     I,
-    Leave
+    Leave,
+    Loop
 };
 
 struct Token {

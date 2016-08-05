@@ -128,6 +128,7 @@ static TokenType getSimpleToken(const std::string& wordName) {
         { "drop", Drop },
         { "i", I },
         { "leave", Leave },
+        { "loop", Loop },
         { nullptr, None }
     };
     const SimpleScannedWord* it = simpleScannedWords;
