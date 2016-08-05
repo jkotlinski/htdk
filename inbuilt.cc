@@ -327,6 +327,22 @@ static const char emit[] = R"(:code emit
 static const char litstring[] =
     ": (litstring) r> 1+ dup 1+ swap c@ 2dup + 1- >r ;";
 
+static const char tor[] = R"(:code >r
+    pla
+    sta W
+    pla
+    sta W+1
+    inc W
+    bne +
+    inc W+1
++
+    lda MSB,x
+    pha
+    lda LSB,x
+    pha
+    inx
+    jmp (W) ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -335,6 +351,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { ">r", tor },
         { "emit", emit },
         { "cr", cr },
         { "r@", rat },
