@@ -26,7 +26,8 @@ enum TokenType {
     Loop,
     Repeat,
     While,
-    Constant
+    Constant,
+    Invert
 };
 
 struct Token {
