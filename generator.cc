@@ -50,6 +50,22 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case While:
+                fprintf(f, "\tjsr " LPAREN "if" RPAREN "\n\tbeq .l%i\n", localLabel);
+                dictionary->markAsUsed("(if)");
+                {
+                    const int tmp = stack.back();
+                    stack.pop_back();
+                    stack.push_back(localLabel++);
+                    stack.push_back(tmp);
+                }
+                break;
+            case Repeat:
+                fprintf(f, "\tjmp .l%i\n", stack.back());
+                stack.pop_back();
+                fprintf(f, ".l%i:\n", stack.back());
+                stack.pop_back();
+                break;
             case Loop:
                 fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n\tjmp .l%i\n.loopexit_%i:\n",
                         stack.back(),

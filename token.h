@@ -23,7 +23,9 @@ enum TokenType {
     Do,
     I,
     Leave,
-    Loop
+    Loop,
+    Repeat,
+    While
 };
 
 struct Token {
