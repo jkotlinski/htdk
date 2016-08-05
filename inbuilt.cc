@@ -304,6 +304,19 @@ static const char do_[] = R"(:code (do) ; ( limit first -- )
     pha
     rts ;code)";
 
+static const char rat[] = R"(:code r@
+    txa
+    tsx
+    ldy $103,x
+    sty W
+    ldy $104,x
+    tax
+    dex
+    sty MSB,x
+    lda W
+    sta LSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -312,7 +325,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
-        { "(do)", do_ },
+        { "r@", rat },
         { "depth", depth },
         { "2*", twomul },
         { "*", mul },
@@ -338,6 +351,7 @@ const char* getDefinition(const char* wordName) {
         { "rot", rot },
         { "swap", swap },
         // internal
+        { "(do)", do_ },
         { "(if)", ifcmp },
         { "(pushya)", pushya },
         { nullptr, nullptr }

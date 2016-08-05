@@ -14,8 +14,20 @@
 
 static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
         Tokens::const_iterator* it, bool* state, Dictionary* dictionary) {
+    static const char* noTailCallEliminationWords[] = {
+        "r@",
+        "r>",
+        "unloop",
+        ">r",
+        nullptr
+    };
     ++*it;
     bool tailCall = (*it != tokens.end() && (*it)->type == SemiColon);
+    const char** tceIt = noTailCallEliminationWords;
+    while (*tceIt) {
+        tailCall &= !strcmp(wordName, *tceIt);
+        ++tceIt;
+    }
     --*it;
     fprintf(f, tailCall ? "\tjmp %s\n" : "\tjsr %s\n", label(wordName).c_str());
     if (tailCall) {
