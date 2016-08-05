@@ -163,6 +163,12 @@ static Token token(const char*& s) {
         }
         ++s;
         return token(s);
+    } else if (wordName == "(") {  // Comment.
+        while (!isspace(s[0]) || s[1] != ')' || !isspace(s[2])) {
+            ++s;
+        }
+        s += 3;
+        return token(s);
     } else if (wordName == "hex") {
         consumeWord(s);
         base = 16;
