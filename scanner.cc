@@ -42,7 +42,7 @@ static bool is_hexadecimal_integer(const char* s) {
     if (*s != '$') {
         return false;
     }
-    return is_integer(s + 1, 10);
+    return is_integer(s + 1, 16);
 }
 
 static bool is_number(const char* s) {
@@ -59,9 +59,11 @@ static int parse_number(const char* s, int base) {
     while (*s) {
         i *= base;
         char c = *s;
-        c -= '0';
-        if (c > '9') {
-            c += '0' - 'a' + 10;
+        if (c < 'a') {
+            c -= '0';
+        } else {
+            c -= 'a';
+            c += 10;
         }
         i += c;
         ++s;
