@@ -146,8 +146,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case Number:
                 // puts("Number");
                 if (state) {
-                    dictionary->markAsUsed("lit");
-                    fprintf(f, "\tjsr lit\n\t!word %i\n", it->intData);
+                    dictionary->markAsUsed("(lit)");
+                    fprintf(f, "\tjsr " LPAREN "lit" RPAREN "\n\t!word %i\n", it->intData);
                 } else {
                     stack.push_back(it->intData);
                 }

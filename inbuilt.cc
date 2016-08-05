@@ -83,7 +83,7 @@ static const char swap[] = R"(:code swap
     sty LSB + 1, x
     rts ;code)";
 
-static const char lit[] = R"(:code lit
+static const char lit[] = R"(:code (lit)
     dex
     pla
     sta W
@@ -355,12 +355,12 @@ const char* getDefinition(const char* wordName) {
         { "dup", dup },
         { "?dup", qdup },
 		{ "fill", fill },
-        { "lit", lit },
         { "over", over },
         { "rot", rot },
         { "swap", swap },
         // internal
         { "(do)", do_ },
+        { "(lit)", lit },
         { "(if)", ifcmp },
         { "(pushya)", pushya },
         { nullptr, nullptr }
