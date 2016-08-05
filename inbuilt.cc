@@ -480,6 +480,45 @@ static const char rshift[] = R"(:code rshift
 +   inx
     rts ;code)";
 
+static const char lt[] = R"(:code <
+    ldy #0
+    sec
+    lda LSB+1,x
+    sbc LSB,x
+    lda MSB+1,x
+    sbc MSB,x
+    bvc +
+    eor #$80
++   bpl +
+    dey
++   inx
+    sty LSB,x
+    sty MSB,x
+    rts ;code)";
+
+static const char gt[] = ": > swap < ;";
+
+static const char max[] = ": max 2dup < if swap then drop ;";
+static const char min[] = ": min 2dup > if swap then drop ;";
+
+static const char uless[] = R"(:code u<
+    ldy #0
+    lda MSB, x
+    cmp MSB + 1, x
+    bcc .false
+    bne .true
+    ; ok, msb are equal...
+    lda LSB + 1, x
+    cmp LSB, x
+    bcs .false
+.true
+    dey
+.false
+    inx
+    sty MSB, x
+    sty LSB, x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -488,6 +527,11 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "u<", uless },
+        { "min", min },
+        { "max", max },
+        { "<", lt },
+        { ">", gt },
         { "rshift", rshift },
         { "lshift", lshift },
         { "2/", twodiv },
