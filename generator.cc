@@ -37,6 +37,19 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
     dictionary->markAsUsed(wordName);
 }
 
+static void create(FILE* f, const Tokens& tokens, Tokens::const_iterator* it, Dictionary* dictionary) {
+    ++*it;
+    if (*it == tokens.end() || (*it)->type != WordName) {
+        fprintf(stderr, "create must be followed by a word name!");
+        exit(1);
+    }
+    fprintf(f, "\n%s:\n", label((*it)->stringData).c_str());
+    fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n");
+    dictionary->addWord((*it)->stringData);
+    dictionary->markAsUsed("(pushya)");
+    free((*it)->stringData);
+}
+
 void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     static int loopCounter;
     static int localLabel;
@@ -106,17 +119,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 stack.pop_back();
                 break;
             case Create:
-                ++it;
-                if (it == tokens.end() || it->type != WordName) {
-                    fprintf(stderr, "create must be followed by a word name!");
-                    exit(1);
-                }
-                // printf("Create '%s'\n", it->stringData);
-                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
-                fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n");
-                dictionary->addWord(it->stringData);
-                dictionary->markAsUsed("(pushya)");
-                free(it->stringData);
+                create(f, tokens, &it, dictionary);
                 break;
             case String:
                 fprintf(f, "\tjsr " LPAREN "litstring" RPAREN "\n!byte %i\n!text \"%s\"\n",
@@ -125,20 +128,11 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 free(it->stringData);
                 break;
             case Variable:
-                // puts("Variable");
-                ++it;
-                if (it == tokens.end() || it->type != WordName) {
-                    fprintf(stderr, "variable must be followed by a word name!");
-                    exit(1);
-                }
-                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
-                dictionary->addWord(it->stringData);
-                fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n!word vl_%i\n", variableLabel);
+                create(f, tokens, &it, dictionary);
+                fprintf(f, "!word vl_%i\n", variableLabel);
                 undefinedVariables.insert(variableLabel);
                 variableLabels[it->stringData] = variableLabel;
                 ++variableLabel;
-                dictionary->markAsUsed("(pushya)");
-                free(it->stringData);
                 break;
             case Store:
                 if (!state) {
