@@ -252,10 +252,31 @@ T{ 0 MIN-INT MAX -> 0 }T
 T{ MAX-INT MIN-INT MAX -> MAX-INT }T
 T{ MAX-INT 0 MAX -> MAX-INT }T ;
 
+: test-stack
+s" STACK OPS: 2DROP 2DUP 2OVER 2SWAP ?DUP DEPTH DROP DUP OVER ROT SWAP" testing
+
+T{ 1 2 2DROP -> }T
+T{ 1 2 2DUP -> 1 2 1 2 }T
+T{ 1 2 3 4 2OVER -> 1 2 3 4 1 2 }T
+T{ 1 2 3 4 2SWAP -> 3 4 1 2 }T
+T{ 0 ?DUP -> 0 }T
+T{ 1 ?DUP -> 1 1 }T
+T{ -1 ?DUP -> -1 -1 }T
+T{ DEPTH -> 0 }T
+T{ 0 DEPTH -> 0 1 }T
+T{ 0 1 DEPTH -> 0 1 2 }T
+T{ 0 DROP -> }T
+T{ 1 2 DROP -> 1 }T
+T{ 1 DUP -> 1 1 }T
+T{ 1 2 OVER -> 1 2 1 }T
+T{ 1 2 3 ROT -> 2 3 1 }T
+T{ 1 2 SWAP -> 2 1 }T ;
+
 : start
 $16 $d018 c! \ upper/lowercase
 test-basic-assumptions
 test-booleans
 test-shift
 test-compare
+test-stack
 cr s" OK" testing ;

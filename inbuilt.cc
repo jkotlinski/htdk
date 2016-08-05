@@ -519,6 +519,38 @@ static const char uless[] = R"(:code u<
     sty LSB, x
     rts ;code)";
 
+static const char twoover[] = R"(:code 2over
+    dex
+    lda MSB+4,x
+    sta MSB,x
+    lda LSB+4,x
+    sta LSB,x
+    dex
+    lda MSB+4,x
+    sta MSB,x
+    lda LSB+4,x
+    sta LSB,x
+    rts ;code)";
+
+static const char twoswap[] = R"(:code 2swap
+    lda LSB,x
+    ldy LSB+2,x
+    sty LSB,x
+    sta LSB+2,x
+    lda MSB,x
+    ldy MSB+2,x
+    sty MSB,x
+    sta MSB+2,x
+    lda LSB+1,x
+    ldy LSB+3,x
+    sty LSB+1,x
+    sta LSB+3,x
+    lda MSB+1,x
+    ldy MSB+3,x
+    sty MSB+1,x
+    sta MSB+3,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -527,6 +559,8 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "2swap", twoswap },
+        { "2over", twoover },
         { "u<", uless },
         { "min", min },
         { "max", max },
