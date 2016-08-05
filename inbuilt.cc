@@ -324,6 +324,9 @@ static const char emit[] = R"(:code emit
     inx
     jmp $ffd2 ; PUTCHR ;code)";
 
+static const char litstring[] =
+    ": (litstring) r> 1+ dup 1+ swap c@ 2dup + 1- >r ;";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -361,6 +364,7 @@ const char* getDefinition(const char* wordName) {
         // internal
         { "(do)", do_ },
         { "(lit)", lit },
+        { "(litstring)", litstring },
         { "(if)", ifcmp },
         { "(pushya)", pushya },
         { nullptr, nullptr }

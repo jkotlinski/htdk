@@ -91,9 +91,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 free(it->stringData);
                 break;
             case String:
-                fprintf(f, "\tjsr litstring\n!byte %i\n!text \"%s\"\n",
+                fprintf(f, "\tjsr " LPAREN "litstring" RPAREN "\n!byte %i\n!text \"%s\"\n",
                         (int)strlen(it->stringData), it->stringData);
-                dictionary->markAsUsed("litstring");
+                dictionary->markAsUsed("(litstring)");
                 free(it->stringData);
                 break;
             case Variable:
