@@ -118,7 +118,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 undefinedVariables.insert(variableLabel);
                 variableLabels[it->stringData] = variableLabel;
                 ++variableLabel;
-                dictionary->markAsUsed("pushya");
+                dictionary->markAsUsed("(pushya)");
                 free(it->stringData);
                 break;
             case Store:
@@ -240,7 +240,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fprintf(f, "\tldy #%i\n", stack.back() >> 8);
                 fprintf(f, "\tjmp " LPAREN "pushya" RPAREN "\n");
                 stack.pop_back();
-                dictionary->markAsUsed("pushya");
+                dictionary->markAsUsed("(pushya)");
                 free(it->stringData);
                 break;
         }
