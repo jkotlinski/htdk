@@ -551,6 +551,9 @@ static const char twoswap[] = R"(:code 2swap
     sta MSB+3,x
     rts ;code)";
 
+static const char qnegate[] = ": ?negate 0< if negate then ;";
+static const char abs_[] = ": abs dup ?negate ;";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -559,6 +562,8 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "?negate", qnegate },
+        { "abs", abs_ },
         { "2swap", twoswap },
         { "2over", twoover },
         { "u<", uless },

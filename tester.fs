@@ -276,10 +276,59 @@ T{ 1 2 SWAP -> 2 1 }T ;
 
 : GR1 >R R> ;
 : GR2 >R R@ R> DROP ;
-: test-return-stack s" >R R> R@" testing
+: test-return-stack
+s" >R R> R@" testing
 T{ 123 GR1 -> 123 }T
 T{ 123 GR2 -> 123 }T
 T{ 1S GR1 -> 1S }T   ( RETURN STACK HOLDS CELLS ) ;
+
+\ -----
+
+: test-add-subtract
+s" ADD/SUBTRACT: + - 1+ 1- ABS NEGATE" testing
+
+T{ 0 5 + -> 5 }T
+T{ 5 0 + -> 5 }T
+T{ 0 -5 + -> -5 }T
+T{ -5 0 + -> -5 }T
+T{ 1 2 + -> 3 }T
+T{ 1 -2 + -> -1 }T
+T{ -1 2 + -> 1 }T
+T{ -1 -2 + -> -3 }T
+T{ -1 1 + -> 0 }T
+T{ MID-UINT 1 + -> MID-UINT+1 }T
+
+T{ 0 5 - -> -5 }T
+T{ 5 0 - -> 5 }T
+T{ 0 -5 - -> 5 }T
+T{ -5 0 - -> -5 }T
+T{ 1 2 - -> -1 }T
+T{ 1 -2 - -> 3 }T
+T{ -1 2 - -> -3 }T
+T{ -1 -2 - -> 1 }T
+T{ 0 1 - -> -1 }T
+T{ MID-UINT+1 1 - -> MID-UINT }T
+
+T{ 0 1+ -> 1 }T
+T{ -1 1+ -> 0 }T
+T{ 1 1+ -> 2 }T
+T{ MID-UINT 1+ -> MID-UINT+1 }T
+
+T{ 2 1- -> 1 }T
+T{ 1 1- -> 0 }T
+T{ 0 1- -> -1 }T
+T{ MID-UINT+1 1- -> MID-UINT }T
+
+T{ 0 NEGATE -> 0 }T
+T{ 1 NEGATE -> -1 }T
+T{ -1 NEGATE -> 1 }T
+T{ 2 NEGATE -> -2 }T
+T{ -2 NEGATE -> 2 }T
+
+T{ 0 ABS -> 0 }T
+T{ 1 ABS -> 1 }T
+T{ -1 ABS -> 1 }T
+T{ MIN-INT ABS -> MID-UINT+1 }T ;
 
 : start
 $16 $d018 c! \ upper/lowercase
@@ -289,4 +338,5 @@ test-shift
 test-compare
 test-stack
 test-return-stack
+test-add-subtract
 cr s" OK" testing ;
