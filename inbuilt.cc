@@ -359,6 +359,12 @@ static const char rto[] = R"(:code r>
     sta MSB,x
     jmp (W) ;code)";
 
+static const char type[] = R"(: type
+    \ 0 d4 c! ( quote mode off )
+    begin ?dup while
+    swap dup c@ emit 1+ swap 1-
+    repeat drop ;)";
+
 static const char branch[] = R"(:code (branch)
     pla
     sta W
@@ -433,6 +439,7 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "type", type },
         { "quit", quit },
         { "invert", invert },
         { ">r", tor },
