@@ -615,6 +615,76 @@ rotate_r
     sta MSB, x
     rts ;code)";
 
+static const char slash[] = ": / /mod nip ;";
+static const char slashmod[] = ": /mod >r s>d r> fm/mod ;";
+static const char starslash[] = ": */ */mod nip ;";
+static const char starslashmod[] = ": */mod >r m* r> fm/mod ;";
+static const char mod[] = ": mod /mod drop ;";
+static const char dabs[] = ": dabs dup ?dnegate ;";
+static const char nip[] = ": nip swap drop ;";
+static const char tuck[] = ": tuck swap over ;";
+
+static const char fmmod[] = R"(: fm/mod
+dup >r
+dup 0< if negate >r dnegate r> then
+over 0< if tuck + swap then
+um/mod
+r> 0< if swap negate swap then ;)";
+
+static const char smrem[] = R"(: sm/rem
+2dup xor >r over >r abs >r dabs
+r> um/mod swap r> ?negate
+swap r> ?negate ;)";
+
+static const char ummod[] = R"(:code um/mod
+; UM/MOD by Garth Wilson
+; http://6502.org/source/integers/ummodfix/ummodfix.htm
+; ( lsw msw divisor -- rem quot )
+        N = W
+        SEC
+        LDA     LSB+1,X     ; Subtract hi cell of dividend by
+        SBC     LSB,X     ; divisor to see if there's an overflow condition.
+        LDA     MSB+1,X
+        SBC     MSB,X
+        BCS     oflo    ; Branch if /0 or overflow.
+
+        LDA     #17     ; Loop 17x.
+        STA     N       ; Use N for loop counter.
+loop:   ROL     LSB+2,X     ; Rotate dividend lo cell left one bit.
+        ROL     MSB+2,X
+        DEC     N       ; Decrement loop counter.
+        BEQ     end     ; If we're done, then branch to end.
+        ROL     LSB+1,X     ; Otherwise rotate dividend hi cell left one bit.
+        ROL     MSB+1,X
+        lda     #0
+        sta     N+1
+        ROL     N+1     ; Rotate the bit carried out of above into N+1.
+
+        SEC
+        LDA     LSB+1,X     ; Subtract dividend hi cell minus divisor.
+        SBC     LSB,X
+        STA     N+2     ; Put result temporarily in N+2 (lo byte)
+        LDA     MSB+1,X
+        SBC     MSB,X
+        TAY             ; and Y (hi byte).
+        LDA     N+1     ; Remember now to bring in the bit carried out above.
+        SBC     #0
+        BCC     loop
+
+        LDA     N+2     ; If that didn't cause a borrow,
+        STA     LSB+1,X     ; make the result from above to
+        STY     MSB+1,X     ; be the new dividend hi cell
+        bcs     loop    ; and then branch up.
+
+oflo:   LDA     #$FF    ; If overflow or /0 condition found,
+        STA     LSB+1,X     ; just put FFFF in both the remainder
+        STA     MSB+1,X
+        STA     LSB+2,X     ; and the quotient.
+        STA     MSB+2,X
+
+end:    INX
+        jmp swap ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -623,6 +693,17 @@ const char* getDefinition(const char* wordName) {
         const char* definition;
     };
     static const Pair defs[] = {
+        { "um/mod", ummod },
+        { "tuck", tuck },
+        { "dabs", dabs },
+        { "nip", nip },
+        { "sm/rem", smrem },
+        { "fm/mod", fmmod },
+        { "/mod", slashmod },
+        { "mod", mod },
+        { "/", slash },
+        { "*/mod", starslashmod },
+        { "*/", starslash },
         { "um*", ummul },
         { "s>d", sgtd },
         { "m+", mplus },

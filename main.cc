@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 #include "dictionary.h"
 #include "generator.h"
@@ -65,6 +66,10 @@ int main(int argc, char* argv[]) {
     fputs("\n; --- inbuilt words\n", f);
 
     while (dictionary.getMissingWord()) {
+        // FIXME add a tidier way to declare dependencies between code words
+        if (!strcmp(dictionary.getMissingWord(), "um/mod")) {
+            dictionary.markAsUsed("swap");
+        }
         generateAsm(f, scan(getDefinition(dictionary.getMissingWord())), &dictionary);
     }
     fclose(f);
