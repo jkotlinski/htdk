@@ -203,11 +203,11 @@ static Token token(const char*& s) {
             ++s;
         }
         std::string code;
-        while (memcmp(";code", s, strlen(";code"))) {
+        while (!isspace(*s) || memcmp(";code", s + 1, strlen(";code"))) {
             code.push_back(*s);
             ++s;
         }
-        s += strlen(";code");
+        s += strlen(" ;code");
         while (isspace(*s)) {
             ++s;
         }
