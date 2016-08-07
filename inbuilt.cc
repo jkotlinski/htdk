@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <cstring>
 
-static const char chars[] = ": chars ;";
 static const char charplus[] = ": char+ 1+ ;";
 static const char cellplus[] = ": cell+ 2+ ;";
 static const char twofetch[] = ": 2@ dup 2+ @ swap @ ;";
@@ -767,7 +766,6 @@ const char* getDefinition(const char* wordName) {
         { "2!", twostore },
         { "2@", twofetch },
         { "cell+", cellplus },
-        { "chars", chars },
         { "char+", charplus },
         // internal
         { "(loop)", loop },

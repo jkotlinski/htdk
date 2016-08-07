@@ -29,7 +29,8 @@ enum TokenType {
     Constant,
     Here,
     Comma,
-    CComma
+    CComma,
+    Nop
 };
 
 struct Token {

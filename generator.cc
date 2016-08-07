@@ -70,6 +70,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Nop:
+                break;
             case CComma:
                 fprintf(f, "\t!byte %i\n", stack.back());
                 stack.pop_back();
