@@ -9,6 +9,24 @@ static const char cellplus[] = ": cell+ 2+ ;";
 static const char twofetch[] = ": 2@ dup 2+ @ swap @ ;";
 static const char twostore[] = ": 2! swap over ! 2+ ! ;";
 
+static const char plusstore[] = R"(:code +!
+    lda LSB,x
+    sta W
+    lda MSB,x
+    sta W+1
+    ldy #0
+    clc
+    lda (W),y
+    adc LSB+1,x
+    sta (W),y
+    iny
+    lda (W),y
+    adc MSB+1,x
+    sta (W),y
+    inx
+    inx
+    rts ;code)";
+
 static const char pushya[] = R"(:code (pushya)
     dex
     sta LSB,x
@@ -767,6 +785,7 @@ const char* getDefinition(const char* wordName) {
         { "2@", twofetch },
         { "cell+", cellplus },
         { "char+", charplus },
+        { "+!", plusstore },
         // internal
         { "(loop)", loop },
         { "(do)", do_ },
