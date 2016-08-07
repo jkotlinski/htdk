@@ -28,7 +28,8 @@ enum TokenType {
     While,
     Constant,
     Here,
-    Comma
+    Comma,
+    CComma
 };
 
 struct Token {
