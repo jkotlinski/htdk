@@ -580,6 +580,17 @@ T{ -7 2 -3 */MOD -> -7 2 -3 T*/MOD }T
 T{ MAX-INT 2 MAX-INT */MOD -> MAX-INT 2 MAX-INT T*/MOD }T
 T{ MIN-INT 2 MIN-INT */MOD -> MIN-INT 2 MIN-INT T*/MOD }T ;
 
+HERE 1 ALLOT
+HERE
+CONSTANT 2NDA
+CONSTANT 1STA
+: test-here
+s" HERE , @ ! CELL+ CELLS C, C@ C! CHARS 2@ 2! ALIGN ALIGNED +! ALLOT" testing
+T{ 1STA 2NDA U< -> <TRUE> }T      \ HERE MUST GROW WITH ALLOT
+T{ 1STA 1+ -> 2NDA }T         \ ... BY ONE ADDRESS UNIT
+( MISSING TEST: NEGATIVE ALLOT )
+;
+
 : start
 $16 $d018 c! \ upper/lowercase
 test-basic-assumptions
@@ -591,4 +602,5 @@ test-return-stack
 test-add-subtract
 test-multiply
 test-divide
+test-here
 cr s" OK" testing ;

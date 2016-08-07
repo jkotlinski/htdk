@@ -58,6 +58,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
     static int loopCounter;
     static int localLabel;
     static int variableLabel;
+    static int hereLabel;
+
+    const int HERE_MASK = 1 << 31;
 
     std::deque<int> stack;
     std::deque<int> loopStack;
@@ -67,6 +70,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Here:
+                stack.push_back(hereLabel | HERE_MASK);
+                fprintf(f, "here_%i = *\n", hereLabel++);
+                break;
             case While:
                 fprintf(f, "\tjsr " LPAREN "if" RPAREN "\n\tbeq .l%i\n", localLabel);
                 dictionary->markAsUsed("(if)");
@@ -255,8 +262,13 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 }
                 fprintf(f, "\n%s:\n", label(it->stringData).c_str());
                 dictionary->addWord(it->stringData);
-                fprintf(f, "\tlda #%i\n", stack.back() & 0xff);
-                fprintf(f, "\tldy #%i\n", stack.back() >> 8);
+                if (stack.back() & HERE_MASK) {
+                    fprintf(f, "\tlda #<here_%i\n", stack.back() ^ HERE_MASK);
+                    fprintf(f, "\tldy #>here_%i\n", stack.back() ^ HERE_MASK);
+                } else {
+                    fprintf(f, "\tlda #%i\n", stack.back() & 0xff);
+                    fprintf(f, "\tldy #%i\n", stack.back() >> 8);
+                }
                 fprintf(f, "\tjmp " LPAREN "pushya" RPAREN "\n");
                 stack.pop_back();
                 dictionary->markAsUsed("(pushya)");
