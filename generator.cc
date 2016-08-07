@@ -70,6 +70,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Comma:
+                fprintf(f, "\t!word %i\n", stack.back());
+                stack.pop_back();
+                break;
             case Here:
                 stack.push_back(hereLabel | HERE_MASK);
                 fprintf(f, "here_%i = *\n", hereLabel++);

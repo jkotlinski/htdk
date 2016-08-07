@@ -27,7 +27,8 @@ enum TokenType {
     Repeat,
     While,
     Constant,
-    Here
+    Here,
+    Comma
 };
 
 struct Token {

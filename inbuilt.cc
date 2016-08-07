@@ -4,6 +4,10 @@
 #include <cstdlib>
 #include <cstring>
 
+static const char cellplus[] = ": cell+ 2+ ;";
+static const char twofetch[] = ": 2@ dup 2+ @ swap @ ;";
+static const char twostore[] = ": 2! swap over ! 2+ ! ;";
+
 static const char pushya[] = R"(:code (pushya)
     dex
     sta LSB,x
@@ -758,6 +762,9 @@ const char* getDefinition(const char* wordName) {
         { "unloop", unloop },
         { "or", or_ },
         { "xor", xor_ },
+        { "2!", twostore },
+        { "2@", twofetch },
+        { "cell+", cellplus },
         // internal
         { "(loop)", loop },
         { "(do)", do_ },

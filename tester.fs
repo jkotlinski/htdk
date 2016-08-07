@@ -584,11 +584,30 @@ HERE 1 ALLOT
 HERE
 CONSTANT 2NDA
 CONSTANT 1STA
+
+HERE 1 ,
+HERE 2 ,
+CONSTANT 2ND
+CONSTANT 1ST
+
 : test-here
 s" HERE , @ ! CELL+ CELLS C, C@ C! CHARS 2@ 2! ALIGN ALIGNED +! ALLOT" testing
 T{ 1STA 2NDA U< -> <TRUE> }T      \ HERE MUST GROW WITH ALLOT
 T{ 1STA 1+ -> 2NDA }T         \ ... BY ONE ADDRESS UNIT
 ( MISSING TEST: NEGATIVE ALLOT )
+
+T{ 1ST 2ND U< -> <TRUE> }T         \ HERE MUST GROW WITH ALLOT
+T{ 1ST CELL+ -> 2ND }T         \ ... BY ONE CELL
+T{ 1ST 1 CELLS + -> 2ND }T
+T{ 1ST @ 2ND @ -> 1 2 }T
+T{ 5 1ST ! -> }T
+T{ 1ST @ 2ND @ -> 5 2 }T
+T{ 6 2ND ! -> }T
+T{ 1ST @ 2ND @ -> 5 6 }T
+T{ 1ST 2@ -> 6 5 }T
+T{ 2 1 1ST 2! -> }T
+T{ 1ST 2@ -> 2 1 }T
+T{ 1S 1ST !  1ST @ -> 1S }T      \ CAN STORE CELL-WIDE VALUE
 ;
 
 : start
