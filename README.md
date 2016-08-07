@@ -8,6 +8,10 @@ The resulting `code.prg` runs the user-defined word named `start`.
 
 ### Words
 
+#### Not supported
+
+[ ]
+
 #### Compiling
 
 : ; :code ;code value hex

@@ -1,4 +1,4 @@
-OBJS = main.o scanner.o generator.o runtime.o dictionary.o inbuilt.o label.o
+OBJS = main.o scanner.o generator.o runtime.o dictionary.o inbuilt.o label.o pettable.o
 
 htfc: $(OBJS)
 	g++ $(OBJS) --std=c++14 -o htfc

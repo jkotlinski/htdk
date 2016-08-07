@@ -656,6 +656,33 @@ T{ 1ST @ -> 1 }T
 T{ -1 1ST +! 1ST @ -> 0 }T
 ;
 
+\ -----
+
+d8 value X \ petscii
+c8 value H \ petscii
+
+char X constant CHAR-X
+char HELLO constant CHAR-HELLO
+
+: GC1 [CHAR] X ;
+: GC2 [CHAR] HELLO ;
+\ : GC3 [ GC1 ] LITERAL ;
+: GC4 S" XY" ;
+
+: test-char
+s" CHAR [CHAR] [ ] BL S" testing
+
+T{ BL -> 20 }T
+T{ CHAR-X -> X }T
+T{ CHAR-HELLO -> H }T
+T{ GC1 -> X }T
+T{ GC2 -> H }T
+\ T{ GC3 -> X }T
+T{ GC4 SWAP DROP -> 2 }T
+T{ GC4 DROP DUP C@ SWAP CHAR+ C@ -> X X 1+ }T ;
+
+\ =====
+
 : start
 $16 $d018 c! \ upper/lowercase
 test-basic-assumptions
@@ -668,4 +695,5 @@ test-add-subtract
 test-multiply
 test-divide
 test-here
+test-char
 cr s" OK" testing ;

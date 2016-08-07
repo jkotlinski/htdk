@@ -6,6 +6,8 @@
 #include <cstring>
 #include <string>
 
+#include "pettable.h"
+
 static int base = 10;
 
 static bool is_integer(const char* s, int base) {
@@ -218,7 +220,13 @@ static Token token(const char*& s) {
         Token t(Number);
         t.intData = parse_number(wordName.c_str());
         return t;
-    }
+    } else if (wordName == "char" || wordName == "[char]") {
+		consumeWord(s);
+		Token t(Number);
+		t.intData = ascToPetTable[(unsigned char)*s];
+		consumeWord(s);
+		return t;
+	}
 
     Token t(WordName);
     t.stringData = (char*)malloc(wordName.length() + 1);
