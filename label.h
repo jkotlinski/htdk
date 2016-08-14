@@ -2,4 +2,4 @@
 
 #include <string>
 
-std::string label(const char* word);
+std::string label(const std::string& word);

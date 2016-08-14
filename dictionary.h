@@ -5,8 +5,8 @@
 
 class Dictionary {
     public:
-        void markAsUsed(const char* word);
-        void addWord(const char* word);
+        void markAsUsed(const std::string& word);
+        void addWord(const std::string& word);
 
         const char* getMissingWord() const;
         void popMissingWord();

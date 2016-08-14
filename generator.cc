@@ -12,7 +12,7 @@
 #define LPAREN "_28"
 #define RPAREN "_29"
 
-static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
+static void compileCall(FILE* f, const std::string& wordName, const Tokens& tokens,
         Tokens::const_iterator* it, bool* state, Dictionary* dictionary) {
     static const char* noTailCallEliminationWords[] = {
         "r@",
@@ -25,7 +25,7 @@ static void compileCall(FILE* f, const char* wordName, const Tokens& tokens,
     bool tailCall = (*it != tokens.end() && (*it)->type == SemiColon);
     const char** tceIt = noTailCallEliminationWords;
     while (tailCall && *tceIt) {
-        if (!strcmp(wordName, *tceIt)) {
+        if (wordName == *tceIt) {
             tailCall = false;
         }
         ++tceIt;
@@ -45,10 +45,10 @@ static std::string create(FILE* f, const Tokens& tokens, Tokens::const_iterator*
         fprintf(stderr, "create must be followed by a word name!");
         exit(1);
     }
-    fprintf(f, "\n%s:\n", label((*it)->stringData.c_str()).c_str());
+    fprintf(f, "\n%s:\n", label((*it)->stringData).c_str());
     fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n");
     const std::string name = (*it)->stringData;
-    dictionary->addWord((*it)->stringData.c_str());
+    dictionary->addWord((*it)->stringData);
     dictionary->markAsUsed("(pushya)");
     return name;
 }
@@ -205,12 +205,12 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                         wordName.push_back(*p);
                         ++p;
                     }
-                    dictionary->addWord(wordName.c_str());
+                    dictionary->addWord(wordName);
                     if (*p == '\n') {
                         ++p;
                     }
-                    if (label(wordName.c_str()) != wordName) {
-                        fprintf(f, "%s:\t; %s\n%s\n", label(wordName.c_str()).c_str(),
+                    if (label(wordName) != wordName) {
+                        fprintf(f, "%s:\t; %s\n%s\n", label(wordName).c_str(),
                                 wordName.c_str(), p);
                     } else {
                         fprintf(f, "%s:\n%s\n", wordName.c_str(), p);
@@ -223,10 +223,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, ": must be followed by a word name! (is type %i)\n", it->type);
                     exit(1);
                 }
-                fprintf(f, "\n%s:", label(it->stringData.c_str()).c_str());
+                fprintf(f, "\n%s:", label(it->stringData).c_str());
                 // printf("Colon %s\n", it->stringData);
-                dictionary->addWord(it->stringData.c_str());
-                if (it->stringData != label(it->stringData.c_str())) {
+                dictionary->addWord(it->stringData);
+                if (it->stringData != label(it->stringData)) {
                     fprintf(f, "\t; %s", it->stringData.c_str());
                 }
                 fprintf(f, "\n");
@@ -268,8 +268,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, "value must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n%s:\n", label(it->stringData.c_str()).c_str());
-                dictionary->addWord(it->stringData.c_str());
+                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
+                dictionary->addWord(it->stringData);
                 if (stack.back() & HERE_MASK) {
                     fprintf(f, "\tlda #<here_%i\n", stack.back() ^ HERE_MASK);
                     fprintf(f, "\tldy #>here_%i\n", stack.back() ^ HERE_MASK);

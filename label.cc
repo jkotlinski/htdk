@@ -1,7 +1,8 @@
 #include "label.h"
 
-std::string label(const char* word) {
+std::string label(const std::string& word_) {
     std::string s;
+    const char* word = word_.c_str();
     while (*word) {
         unsigned char c = *word;
         if (isalpha(c)) {

@@ -2,9 +2,9 @@
 
 #include <cassert>
 
-void Dictionary::addWord(const char* word) {
+void Dictionary::addWord(const std::string& word) {
     if (addedWords.find(word) != addedWords.end()) {
-        fprintf(stderr, "Redefining word '%s' is not allowed\n", word);
+        fprintf(stderr, "Redefining word '%s' is not allowed\n", word.c_str());
         exit(1);
     }
     addedWords.insert(word);
@@ -15,7 +15,7 @@ void Dictionary::addWord(const char* word) {
     }
 }
 
-void Dictionary::markAsUsed(const char* word) {
+void Dictionary::markAsUsed(const std::string& word) {
     if (addedWords.find(word) == addedWords.end()) {
         missingWords.insert(word);
     }
