@@ -685,9 +685,11 @@ T{ GC4 DROP DUP C@ SWAP CHAR+ C@ -> X X 1+ }T ;
 
 : gt1 123 ;
 : gt2 ['] gt1 ;
+HERE 3 C, CHAR G C, CHAR T C, CHAR 1 C, CONSTANT GT1STRING
 : test-xt
+s" ['] execute count" testing
 T{ gt2 execute -> 123 }T
-\ todo: more stuff
+T{ GT1STRING COUNT -> GT1STRING CHAR+ 3 }T
 ;
 
 \ =====

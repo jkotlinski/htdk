@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 
+static const char count[] = ": count dup 1+ swap c@ ;";
 static const char execute[] = R"(:code execute
     lda LSB,x
     sta W
@@ -820,6 +821,7 @@ const char* getDefinition(const char* wordName) {
         { "+!", plusstore },
         { "bl", bl },
         { "execute", execute },
+        { "count", count },
         // internal
         { "(loop)", loop },
         { "(do)", do_ },
