@@ -45,12 +45,11 @@ static std::string create(FILE* f, const Tokens& tokens, Tokens::const_iterator*
         fprintf(stderr, "create must be followed by a word name!");
         exit(1);
     }
-    fprintf(f, "\n%s:\n", label((*it)->stringData).c_str());
+    fprintf(f, "\n%s:\n", label((*it)->stringData.c_str()).c_str());
     fprintf(f, "\tlda #<+\n\tldy #>+\n\tjmp " LPAREN "pushya" RPAREN "\n+\n");
     const std::string name = (*it)->stringData;
-    dictionary->addWord((*it)->stringData);
+    dictionary->addWord((*it)->stringData.c_str());
     dictionary->markAsUsed("(pushya)");
-    free((*it)->stringData);
     return name;
 }
 
@@ -144,9 +143,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 break;
             case String:
                 fprintf(f, "\tjsr " LPAREN "litstring" RPAREN "\n!byte %i\n!text \"%s\"\n",
-                        (int)strlen(it->stringData), it->stringData);
+                        (int)it->stringData.size(), it->stringData.c_str());
                 dictionary->markAsUsed("(litstring)");
-                free(it->stringData);
                 break;
             case Variable:
                 {
@@ -171,18 +169,15 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 break;
             case WordName:
                 // printf("WordName %s\n", it->stringData);
-                assert(it->stringData);
+                assert(!it->stringData.empty());
                 if (state) {
-                    char* wordName = it->stringData;
-                    compileCall(f, wordName, tokens, &it, &state, dictionary);
-                    free(wordName);
+                    compileCall(f, it->stringData.c_str(), tokens, &it, &state, dictionary);
                 } else {
-                    char* wordName = it->stringData;
+                    const std::string& wordName = it->stringData;
                     if (variableLabels.find(wordName) != variableLabels.end()) {
                         stack.push_back(variableLabels[wordName]);
-                        free(it->stringData);
                     } else {
-                        fprintf(stderr, "Variable '%s' not defined\n", wordName);
+                        fprintf(stderr, "Variable '%s' not defined\n", wordName.c_str());
                         exit(1);
                     }
                 }
@@ -204,7 +199,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
             case Code:
                 // puts("Code");
                 {
-                    char* p = it->stringData;
+                    const char* p = it->stringData.c_str();
                     std::string wordName;
                     while (!isspace(*p)) {
                         wordName.push_back(*p);
@@ -221,7 +216,6 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                         fprintf(f, "%s:\n%s\n", wordName.c_str(), p);
                     }
                 }
-                free(it->stringData);
                 break;
             case Colon:
                 ++it;
@@ -229,14 +223,13 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, ": must be followed by a word name! (is type %i)\n", it->type);
                     exit(1);
                 }
-                fprintf(f, "\n%s:", label(it->stringData).c_str());
+                fprintf(f, "\n%s:", label(it->stringData.c_str()).c_str());
                 // printf("Colon %s\n", it->stringData);
-                dictionary->addWord(it->stringData);
-                if (it->stringData != label(it->stringData)) {
-                    fprintf(f, "\t; %s", it->stringData);
+                dictionary->addWord(it->stringData.c_str());
+                if (it->stringData != label(it->stringData.c_str())) {
+                    fprintf(f, "\t; %s", it->stringData.c_str());
                 }
                 fprintf(f, "\n");
-                free(it->stringData);
                 state = true;
                 break;
             case Drop:
@@ -275,8 +268,8 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     fprintf(stderr, "value must be followed by a word name!");
                     exit(1);
                 }
-                fprintf(f, "\n%s:\n", label(it->stringData).c_str());
-                dictionary->addWord(it->stringData);
+                fprintf(f, "\n%s:\n", label(it->stringData.c_str()).c_str());
+                dictionary->addWord(it->stringData.c_str());
                 if (stack.back() & HERE_MASK) {
                     fprintf(f, "\tlda #<here_%i\n", stack.back() ^ HERE_MASK);
                     fprintf(f, "\tldy #>here_%i\n", stack.back() ^ HERE_MASK);
@@ -287,7 +280,6 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fprintf(f, "\tjmp " LPAREN "pushya" RPAREN "\n");
                 stack.pop_back();
                 dictionary->markAsUsed("(pushya)");
-                free(it->stringData);
                 break;
         }
     }

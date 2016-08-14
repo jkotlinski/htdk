@@ -194,8 +194,7 @@ static Token token(const char*& s) {
         }
         ++s;
         Token t(String);
-        t.stringData = (char*)malloc(stringData.size() + 1);
-        strcpy(t.stringData, stringData.c_str());
+        t.stringData = stringData;
         return t;
     } else if (wordName == ":code") {
         s += strlen(":code ");
@@ -212,8 +211,7 @@ static Token token(const char*& s) {
             ++s;
         }
         Token t(Code);
-        t.stringData = (char*)malloc(code.size() + 1);
-        strcpy(t.stringData, code.c_str());
+        t.stringData = code;
         return t;
     } else if (is_number(wordName.c_str())) {
         consumeWord(s);
@@ -229,9 +227,8 @@ static Token token(const char*& s) {
 	}
 
     Token t(WordName);
-    t.stringData = (char*)malloc(wordName.length() + 1);
-    assert(t.stringData);
-    strcpy(t.stringData, wordName.c_str());
+    assert(!wordName.empty());
+    t.stringData = wordName;
     consumeWord(s);
     return t;
 }

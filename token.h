@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 enum TokenType {
     None,
     WordName,
@@ -37,6 +39,6 @@ struct Token {
     explicit Token(TokenType type) : type(type) {}
 
     TokenType type;
-    char* stringData = nullptr;
+    std::string stringData;
     int intData = 0;
 };
