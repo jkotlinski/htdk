@@ -698,6 +698,9 @@ T{ GT1STRING COUNT -> GT1STRING CHAR+ 3 }T
 : GI2 IF 123 ELSE 234 THEN ;
 : GI3 BEGIN DUP 5 < WHILE DUP 1+ REPEAT ;
 : GI4 BEGIN DUP 1+ DUP 5 > UNTIL ;
+: GI5 BEGIN DUP 2 >
+         WHILE DUP 5 < WHILE DUP 1+ REPEAT 123 ELSE 345 THEN ;
+: GI6 ( N -- 0,1,..N ) DUP IF DUP >R 1- RECURSE R> THEN ;
 : test-branch
 s" IF ELSE THEN BEGIN WHILE REPEAT UNTIL RECURSE" testing
 T{ 0 GI1 -> }T
@@ -715,7 +718,18 @@ T{ 6 GI3 -> 6 }T
 T{ 3 GI4 -> 3 4 5 6 }T
 T{ 5 GI4 -> 5 6 }T
 T{ 6 GI4 -> 6 7 }T
-;
+
+T{ 1 GI5 -> 1 345 }T
+T{ 2 GI5 -> 2 345 }T
+T{ 3 GI5 -> 3 4 5 123 }T
+T{ 4 GI5 -> 4 5 123 }T
+T{ 5 GI5 -> 5 123 }T
+
+T{ 0 GI6 -> 0 }T
+T{ 1 GI6 -> 0 1 }T
+T{ 2 GI6 -> 0 1 2 }T
+T{ 3 GI6 -> 0 1 2 3 }T
+T{ 4 GI6 -> 0 1 2 3 4 }T ;
 
 \ =====
 

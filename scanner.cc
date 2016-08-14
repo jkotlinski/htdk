@@ -142,6 +142,7 @@ static TokenType getSimpleToken(const std::string& wordName) {
         { "aligned", Nop },
         { "[']", Xt },
         { "until", Until },
+        { "recurse", Recurse },
         { nullptr, None }
     };
     const SimpleScannedWord* it = simpleScannedWords;

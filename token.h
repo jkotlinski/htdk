@@ -34,6 +34,7 @@ enum TokenType {
     CComma,
     Xt,
     Until,
+    Recurse,
     Nop
 };
 

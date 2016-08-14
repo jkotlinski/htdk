@@ -61,6 +61,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     const int HERE_MASK = 1 << 31;
 
+    std::string latest;
     std::deque<int> stack;
     std::deque<int> loopStack;
     bool state = false;
@@ -69,6 +70,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Recurse:
+                compileCall(f, latest, tokens, &it, &state, dictionary);
+                break;
             case Xt:
                 ++it;
                 if (it == tokens.end() || it->type != WordName) {
@@ -241,6 +245,7 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                     exit(1);
                 }
                 fprintf(f, "\n%s:", label(it->stringData).c_str());
+                latest = it->stringData;
                 // printf("Colon %s\n", it->stringData);
                 dictionary->addWord(it->stringData);
                 if (it->stringData != label(it->stringData)) {
