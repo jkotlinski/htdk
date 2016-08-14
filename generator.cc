@@ -112,6 +112,10 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fprintf(f, ".l%i:\n", stack.back());
                 stack.pop_back();
                 break;
+            case Until:
+                fprintf(f, "\tjsr " LPAREN "if" RPAREN "\n\tbeq .l%i\n", stack.back());
+                stack.pop_back();
+                break;
             case Loop:
                 fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n\tjmp .l%i\n.loopexit_%i:\n",
                         stack.back(),

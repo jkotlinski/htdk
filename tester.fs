@@ -692,6 +692,31 @@ T{ gt2 execute -> 123 }T
 T{ GT1STRING COUNT -> GT1STRING CHAR+ 3 }T
 ;
 
+\ -----
+
+: GI1 IF 123 THEN ;
+: GI2 IF 123 ELSE 234 THEN ;
+: GI3 BEGIN DUP 5 < WHILE DUP 1+ REPEAT ;
+: GI4 BEGIN DUP 1+ DUP 5 > UNTIL ;
+: test-branch
+s" IF ELSE THEN BEGIN WHILE REPEAT UNTIL RECURSE" testing
+T{ 0 GI1 -> }T
+T{ 1 GI1 -> 123 }T
+T{ -1 GI1 -> 123 }T
+T{ 0 GI2 -> 234 }T
+T{ 1 GI2 -> 123 }T
+T{ -1 GI1 -> 123 }T
+
+T{ 0 GI3 -> 0 1 2 3 4 5 }T
+T{ 4 GI3 -> 4 5 }T
+T{ 5 GI3 -> 5 }T
+T{ 6 GI3 -> 6 }T
+
+T{ 3 GI4 -> 3 4 5 6 }T
+T{ 5 GI4 -> 5 6 }T
+T{ 6 GI4 -> 6 7 }T
+;
+
 \ =====
 
 : start
@@ -708,4 +733,5 @@ test-divide
 test-here
 test-char
 test-xt
+test-branch
 cr s" OK" testing ;
