@@ -4,6 +4,14 @@
 #include <cstdlib>
 #include <cstring>
 
+static const char execute[] = R"(:code execute
+    lda LSB,x
+    sta W
+    lda MSB,x
+    sta W+1
+    inx
+    jmp (W) ;code)";
+
 static const char charplus[] = ": char+ 1+ ;";
 static const char cellplus[] = ": cell+ 2+ ;";
 static const char twofetch[] = ": 2@ dup 2+ @ swap @ ;";
@@ -811,6 +819,7 @@ const char* getDefinition(const char* wordName) {
         { "char+", charplus },
         { "+!", plusstore },
         { "bl", bl },
+        { "execute", execute },
         // internal
         { "(loop)", loop },
         { "(do)", do_ },

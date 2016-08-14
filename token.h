@@ -32,6 +32,7 @@ enum TokenType {
     Here,
     Comma,
     CComma,
+    Xt,
     Nop
 };
 

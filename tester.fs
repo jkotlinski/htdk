@@ -681,6 +681,15 @@ T{ GC2 -> H }T
 T{ GC4 SWAP DROP -> 2 }T
 T{ GC4 DROP DUP C@ SWAP CHAR+ C@ -> X X 1+ }T ;
 
+\ -----
+
+: gt1 123 ;
+: gt2 ['] gt1 ;
+: test-xt
+T{ gt2 execute -> 123 }T
+\ todo: more stuff
+;
+
 \ =====
 
 : start
@@ -696,4 +705,5 @@ test-multiply
 test-divide
 test-here
 test-char
+test-xt
 cr s" OK" testing ;

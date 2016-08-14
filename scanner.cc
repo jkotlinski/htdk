@@ -140,6 +140,7 @@ static TokenType getSimpleToken(const std::string& wordName) {
         { "chars", Nop },
         { "align", Nop },
         { "aligned", Nop },
+        { "[']", Xt },
         { nullptr, None }
     };
     const SimpleScannedWord* it = simpleScannedWords;
@@ -224,7 +225,7 @@ static Token token(const char*& s) {
 		t.intData = ascToPetTable[(unsigned char)*s];
 		consumeWord(s);
 		return t;
-	}
+    }
 
     Token t(WordName);
     assert(!wordName.empty());

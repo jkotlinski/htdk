@@ -69,6 +69,19 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Xt:
+                ++it;
+                if (it == tokens.end() || it->type != WordName) {
+                    fprintf(stderr, "['] must be followed by a word name! (is type %i)\n", it->type);
+                    exit(1);
+                }
+                if (!state) {
+                    fprintf(stderr, "['] only works when compiling\n");
+                    exit(1);
+                }
+                fprintf(f, "\tjsr " LPAREN "lit" RPAREN "\n\t!word %s\n", label(it->stringData).c_str());
+                dictionary->markAsUsed("(lit)");
+                break;
             case Nop:
                 break;
             case CComma:
