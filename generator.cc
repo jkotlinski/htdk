@@ -22,7 +22,7 @@ static void compileCall(FILE* f, const std::string& wordName, const Tokens& toke
         nullptr
     };
     ++*it;
-    bool tailCall = (*it != tokens.end() && (*it)->type == SemiColon);
+    bool tailCall = (*it != tokens.end() && ((*it)->type == SemiColon || (*it)->type == Exit));
     const char** tceIt = noTailCallEliminationWords;
     while (tailCall && *tceIt) {
         if (wordName == *tceIt) {
@@ -70,6 +70,9 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
 
     for (auto it = tokens.begin(); it != tokens.end(); ++it) {
         switch (it->type) {
+            case Exit:
+                fprintf(f, "\trts ; exit\n");
+                break;
             case Recurse:
                 compileCall(f, latest, tokens, &it, &state, dictionary);
                 break;

@@ -136,6 +136,7 @@ static TokenType getSimpleToken(const std::string& wordName) {
         { "while", While },
         { "constant", Constant },
         { "here", Here },
+        { "exit", Exit },
         { ",", Comma },
         { "c,", CComma },
         { "chars", Nop },

@@ -36,6 +36,7 @@ enum TokenType {
     Xt,
     Until,
     Recurse,
+    Exit,
     Nop
 };
 
