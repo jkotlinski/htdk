@@ -12,7 +12,7 @@ The resulting `code.prg` runs the user-defined word named `start`.
 
 Since this is a cross-compiled Forth, rather than a true Forth, many important compiling words are missing:
 
-[ ] ' find immediate literal postpone state does> >body evaluate source >in
+[ ] ' find immediate literal postpone state does> >body evaluate source >in word
 
 #### Compiling
 
