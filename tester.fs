@@ -768,6 +768,18 @@ T{ 1 GD6 -> 1 }T
 T{ 2 GD6 -> 3 }T
 T{ 3 GD6 -> 4 1 2 }T ;
 
+\ -----
+
+123 CONSTANT X123
+VARIABLE V1
+123 V1 !
+: test-create
+s" DEFINING WORDS: : ; CONSTANT VARIABLE CREATE DOES> >BODY" testing
+
+T{ X123 -> 123 }T
+
+T{ V1 @ -> 123 }T ;
+
 \ =====
 
 : start
@@ -786,4 +798,5 @@ test-char
 test-xt
 test-branch
 test-loop
+test-create
 cr s" OK" testing ;
