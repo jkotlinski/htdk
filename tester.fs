@@ -734,11 +734,16 @@ T{ 4 GI6 -> 0 1 2 3 4 }T ;
 \ -----
 
 : GD1 DO I LOOP ;
+: GD2 DO I -1 +LOOP ;
 : test-loop
 s" DO LOOP +LOOP I J UNLOOP LEAVE EXIT" testing
 T{ 4 1 GD1 -> 1 2 3 }T
 T{ 2 -1 GD1 -> -1 0 1 }T
 T{ MID-UINT+1 MID-UINT GD1 -> MID-UINT }T
+
+T{ 1 4 GD2 -> 4 3 2 1 }T
+T{ -1 2 GD2 -> 2 1 0 -1 }T
+T{ MID-UINT MID-UINT+1 GD2 -> MID-UINT+1 MID-UINT }T
 ;
 
 \ =====

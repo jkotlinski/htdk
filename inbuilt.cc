@@ -436,6 +436,15 @@ static const char branch[] = R"(:code (branch)
 +   jmp $1234
 ;code)";
 
+static const char within[] = ": within over - >r - r> u< ;";
+
+static const char plusloop[] = R"(: (plusloop)
+r> swap r> 2dup +
+rot 0< if tuck swap else tuck then
+r@ 1- rot rot within 0= if
+>r >r else
+r> 2drop 3 + >r then ;)";
+
 static const char loop[] = R"(:code (loop)
     stx W
     tsx
@@ -822,8 +831,10 @@ const char* getDefinition(const char* wordName) {
         { "bl", bl },
         { "execute", execute },
         { "count", count },
+        { "within", within },
         // internal
         { "(loop)", loop },
+        { "(plusloop)", plusloop },
         { "(do)", do_ },
         { "(lit)", lit },
         { "(litc)", litc },

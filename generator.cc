@@ -120,6 +120,14 @@ void generateAsm(FILE* f, const Tokens& tokens, Dictionary* dictionary) {
                 fprintf(f, "\tjsr " LPAREN "if" RPAREN "\n\tbeq .l%i\n", stack.back());
                 stack.pop_back();
                 break;
+            case PlusLoop:
+                fprintf(f, "\tjsr " LPAREN "plusloop" RPAREN "\n\tjmp .l%i\n.loopexit_%i:\n",
+                        stack.back(),
+                        loopStack.back());
+                stack.pop_back();
+                loopStack.pop_back();
+                dictionary->markAsUsed("(plusloop)");
+                break;
             case Loop:
                 fprintf(f, "\tjsr " LPAREN "loop" RPAREN "\n\tjmp .l%i\n.loopexit_%i:\n",
                         stack.back(),

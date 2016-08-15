@@ -131,6 +131,7 @@ static TokenType getSimpleToken(const std::string& wordName) {
         { "i", I },
         { "leave", Leave },
         { "loop", Loop },
+        { "+loop", PlusLoop },
         { "repeat", Repeat },
         { "while", While },
         { "constant", Constant },

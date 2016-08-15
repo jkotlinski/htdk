@@ -26,6 +26,7 @@ enum TokenType {
     I,
     Leave,
     Loop,
+    PlusLoop,
     Repeat,
     While,
     Constant,
