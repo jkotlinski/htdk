@@ -10,7 +10,7 @@ The resulting `code.prg` runs the user-defined word named `start`.
 
 #### Not supported
 
-[ ] ' find immediate literal postpone state does> &lt;body evaluate source &lt;in
+[ ] ' find immediate literal postpone state does> >body evaluate source >in
 
 #### Compiling
 
