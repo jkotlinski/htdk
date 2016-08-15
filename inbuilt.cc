@@ -750,6 +750,19 @@ oflo:   LDA     #$FF    ; If overflow or /0 condition found,
 end:    INX
         jmp swap ;code)";
 
+static const char j[] = R"(:code j
+    txa
+    tsx
+    ldy $107,x
+    sty W
+    ldy $108,x
+    tax
+    dex
+    sty MSB,x
+    lda W
+    sta LSB,x
+    rts ;code)";
+
 // -----
 
 const char* getDefinition(const char* wordName) {
@@ -832,6 +845,7 @@ const char* getDefinition(const char* wordName) {
         { "execute", execute },
         { "count", count },
         { "within", within },
+        { "j", j },
         // internal
         { "(loop)", loop },
         { "(plusloop)", plusloop },
