@@ -731,6 +731,16 @@ T{ 2 GI6 -> 0 1 2 }T
 T{ 3 GI6 -> 0 1 2 3 }T
 T{ 4 GI6 -> 0 1 2 3 4 }T ;
 
+\ -----
+
+: GD1 DO I LOOP ;
+: test-loop
+s" DO LOOP +LOOP I J UNLOOP LEAVE EXIT" testing
+T{ 4 1 GD1 -> 1 2 3 }T
+T{ 2 -1 GD1 -> -1 0 1 }T
+T{ MID-UINT+1 MID-UINT GD1 -> MID-UINT }T
+;
+
 \ =====
 
 : start
@@ -748,4 +758,5 @@ test-here
 test-char
 test-xt
 test-branch
+test-loop
 cr s" OK" testing ;
